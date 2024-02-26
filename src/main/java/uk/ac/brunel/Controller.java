@@ -11,6 +11,8 @@ import java.util.*;
 
 
 public class Controller implements Initializable {
+	
+	DatabaseManager dbm = new DatabaseManager();
 
     @FXML
     private Button helloButton;
@@ -21,6 +23,13 @@ public class Controller implements Initializable {
     @FXML
     private void handleButtonClick(ActionEvent event) {
         System.out.println("Hello, World!");
+        
+        try {
+            dbm.conn(); // Assuming dbm is an instance of DatabaseManager
+        } catch (Exception e) { // Catching all exceptions and printing their stack trace
+            e.printStackTrace(); // Print the stack trace to diagnose the issue
+        }
+        
     }
     
     @Override
