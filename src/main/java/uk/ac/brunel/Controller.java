@@ -9,43 +9,71 @@ import javafx.util.Callback;
 import java.net.URL;
 import java.util.*;
 
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+
+import java.io.IOException;
+import javafx.scene.layout.StackPane;
+
+
 
 public class Controller implements Initializable {
 	
 	DatabaseManager dbm = new DatabaseManager();
 
+	
+	// FXML variables
     @FXML
     private Button helloButton;
 
     @FXML
     private ListView<Doctor> listView;
     
+    // variables
+    ArrayList<Doctor> items = new ArrayList<>();
+    
+    // methods
+    
     @FXML
     private void handleButtonClick(ActionEvent event) {
         System.out.println("Hello, World!");
         
         try {
-            dbm.conn(); // Assuming dbm is an instance of DatabaseManager
-        } catch (Exception e) { // Catching all exceptions and printing their stack trace
-            e.printStackTrace(); // Print the stack trace to diagnose the issue
+            dbm.conn(); 
+        } catch (Exception e) { 
+            e.printStackTrace(); 
         }
         
     }
     
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-    	
-    	// Create list of items
-    	List<Doctor> items = new ArrayList<>();
-        items.add(new Doctor(0, "Dr Mia Carte", "Vascular Surgery", 4.9, 45));
+       
+    	try {
+    		  items.addAll(dbm.getAllDoctors(dbm.conn()));
+    	}
+    	catch(Exception e) {
+    		  e.printStackTrace();
+    	}
         
         listView.getItems().addAll(items);
         
-     // Set cell factory to display name property
+        listView.setOnMouseClicked(event -> {
+            Doctor selectedDoctor = listView.getSelectionModel().getSelectedItem();
+            if (selectedDoctor != null) {
+                navigateToDestination(selectedDoctor);
+            }
+        });
+        
+        // Set cell factory to display name property
         listView.setCellFactory(new Callback<ListView<Doctor>, ListCell<Doctor>>() {
+        	
             @Override
             public ListCell<Doctor> call(ListView<Doctor> param) {
                 return new ListCell<Doctor>() {
+                	
                     @Override
                     protected void updateItem(Doctor item, boolean empty) {
                         super.updateItem(item, empty);
@@ -55,12 +83,31 @@ public class Controller implements Initializable {
                             setText(null);
                         }
                     }
+                    
                 };
+                
             }
+            
         });
     	
         
         
+    }
+    
+    private void navigateToDestination(Doctor doctor) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("DoctorReview.fxml"));
+            Parent root = loader.load();
+            DoctorReviewController destinationController = loader.getController();
+            
+            // Pass data to the destination controller if needed
+            destinationController.initData(doctor);
+            
+            StackPane rootPane = (StackPane) helloButton.getScene().getRoot();
+            rootPane.getChildren().setAll(root);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
     
 }
