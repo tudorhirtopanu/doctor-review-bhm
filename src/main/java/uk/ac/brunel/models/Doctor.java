@@ -1,4 +1,4 @@
-package uk.ac.brunel;
+package uk.ac.brunel.models;
 
 public class Doctor {
 	

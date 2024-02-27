@@ -1,7 +1,8 @@
-package uk.ac.brunel;
+package uk.ac.brunel.controllers;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import uk.ac.brunel.models.Doctor;
 
 public class DoctorReviewController {
 

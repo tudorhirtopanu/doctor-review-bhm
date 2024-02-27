@@ -1,10 +1,12 @@
-package uk.ac.brunel;
+package uk.ac.brunel.controllers;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.util.Callback;
+import uk.ac.brunel.managers.DatabaseManager;
+import uk.ac.brunel.models.Doctor;
 
 import java.net.URL;
 import java.util.*;
@@ -19,7 +21,7 @@ import javafx.scene.layout.StackPane;
 
 
 
-public class Controller implements Initializable {
+public class HomeController implements Initializable {
 	
 	DatabaseManager dbm = new DatabaseManager();
 
@@ -96,7 +98,7 @@ public class Controller implements Initializable {
     
     private void navigateToDestination(Doctor doctor) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("DoctorReview.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/uk/ac/brunel/views/DoctorReview.fxml"));
             Parent root = loader.load();
             DoctorReviewController destinationController = loader.getController();
             
