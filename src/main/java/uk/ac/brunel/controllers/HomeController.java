@@ -18,6 +18,9 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.text.Text;
+import javafx.scene.text.*;
 
 
 
@@ -40,13 +43,19 @@ public class HomeController implements Initializable {
     
     @FXML
     private void handleButtonClick(ActionEvent event) {
-        System.out.println("Hello, World!");
-        
-        try {
-            dbm.conn(); 
-        } catch (Exception e) { 
-            e.printStackTrace(); 
-        }
+    	
+    	listView.getItems().clear();
+    	
+    	List<Doctor> selectedDoctors = Arrays.asList(
+                new Doctor(0, "Dr Mia Carte", "Vascular Surgery", 4.9, 45),
+                new Doctor(1, "Dr Oliver Johnson", "Vascular Surgery", 3.0, 45),
+                new Doctor(2, "Dr Eli Ward", "Neurolog", 4.5, 49),
+                new Doctor(3, "Dr John Doe", "Cardiology", 4.5, 20),
+                new Doctor(4, "Dr Jane Smith", "Orthopedics", 4.2, 15),
+                new Doctor(5, "Dr Wayne Hope", "Orthopedics", 4.2, 15)
+        );
+    	
+    	listView.getItems().addAll(selectedDoctors);
         
     }
     
@@ -69,31 +78,50 @@ public class HomeController implements Initializable {
             }
         });
         
-        // Set cell factory to display name property
-        listView.setCellFactory(new Callback<ListView<Doctor>, ListCell<Doctor>>() {
+        // Set cell factory
+        listView.setCellFactory(param -> new ListCell<>() {
         	
-            @Override
-            public ListCell<Doctor> call(ListView<Doctor> param) {
-                return new ListCell<Doctor>() {
-                	
-                    @Override
-                    protected void updateItem(Doctor item, boolean empty) {
-                        super.updateItem(item, empty);
-                        if (item != null && !empty) {
-                            setText(item.getName());
-                        } else {
-                            setText(null);
-                        }
-                    }
+        	// Create HBox for each cell
+        	private final HBox hbox = new HBox();
+        	Text name = new Text();
+    		Text specialty = new Text();
+    		Text reviewNo = new Text();
+    		Text rating =  new Text();
+        	
+    		// Instance initialiser block
+        	{
+        		// Create text nodes to display properties of doctor        		
+        		hbox.getChildren().addAll(name,specialty,reviewNo ,rating);
+        		
+        	}
+        	
+        	@Override
+            protected void updateItem(Doctor item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setGraphic(null);
+                } else {
+                    // Update the content of the HBox based on the Doctor object
+                    // For example:
+                    name.setText(item.getName());
+                    specialty.setText(item.getSpecialization());
+                    reviewNo.setText(Integer.toString(item.getTotalReviews()));
+                    rating.setText(Double.toString(item.getReviewRating()));
                     
-                };
-                
+                    name.setWrappingWidth(175);
+                    specialty.setWrappingWidth(220);
+                    reviewNo.setWrappingWidth(75);
+                    rating.setWrappingWidth(75);
+                    
+                    //name.setFont(Font.font(null, FontWeight.SEMI_BOLD, 14));
+
+                    setGraphic(hbox);
+                }
             }
-            
+        	
         });
-    	
-        
-        
+
+    
     }
     
     private void navigateToDestination(Doctor doctor) {
@@ -102,7 +130,6 @@ public class HomeController implements Initializable {
             Parent root = loader.load();
             DoctorReviewController destinationController = loader.getController();
             
-            // Pass data to the destination controller if needed
             destinationController.initData(doctor);
             
             StackPane rootPane = (StackPane) helloButton.getScene().getRoot();
