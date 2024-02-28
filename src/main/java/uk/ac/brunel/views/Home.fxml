@@ -12,7 +12,7 @@
       
           <Button fx:id="helloButton" layoutX="673.0" layoutY="62.0" onAction="#handleButtonClick" text="Search" />
          <TextField layoutX="305.0" layoutY="62.0" prefHeight="26.0" prefWidth="340.0" />
-         <ListView fx:id="listView" layoutX="307.0" layoutY="132.0" prefHeight="386.0" prefWidth="340.0" />
+         <ListView fx:id="listView" layoutX="181.0" layoutY="132.0" prefHeight="386.0" prefWidth="580.0" />
          
       </children>
    </AnchorPane>
