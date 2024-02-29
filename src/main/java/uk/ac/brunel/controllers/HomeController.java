@@ -7,9 +7,11 @@ import javafx.scene.control.*;
 import javafx.util.Callback;
 import uk.ac.brunel.managers.DatabaseManager;
 import uk.ac.brunel.models.Doctor;
+import uk.ac.brunel.managers.DoctorManager;
 
 import java.net.URL;
 import java.util.*;
+
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -26,24 +28,41 @@ import javafx.scene.text.*;
 
 public class HomeController implements Initializable {
 	
-	DatabaseManager dbm = new DatabaseManager();
+	private DatabaseManager dbm = new DatabaseManager();
 
+	private DoctorManager doctorManager = new DoctorManager();
 	
 	// FXML variables
-    @FXML
-    private Button helloButton;
+	@FXML private TextField textField;
+	
+    @FXML private Button helloButton;
 
-    @FXML
-    private ListView<Doctor> listView;
+    @FXML private ListView<Doctor> listView;
+    
+    @FXML private RadioButton sortRatingHighestBtn;
+    
+    @FXML private RadioButton sortRatingLowestBtn;
+    
+    @FXML private ToggleGroup ratingToggle;
     
     // variables
     ArrayList<Doctor> items = new ArrayList<>();
     
     // methods
     
-    @FXML
-    private void handleButtonClick(ActionEvent event) {
+    @FXML private void handleButtonClick(ActionEvent event) {
     	
+    	String text = textField.getText();
+    	
+    	System.out.println(text);
+    	
+    	ArrayList<Doctor> filteredDoctors = doctorManager.filterDoctorByName(items, text);
+    	
+    	listView.getItems().clear();
+    	
+    	listView.getItems().addAll(filteredDoctors);
+    	
+    	/*
     	listView.getItems().clear();
     	
     	List<Doctor> selectedDoctors = Arrays.asList(
@@ -56,27 +75,33 @@ public class HomeController implements Initializable {
         );
     	
     	listView.getItems().addAll(selectedDoctors);
+    	*/
         
+    }
+    
+    private void setupListView() {
+    	
+    	try {
+  		  items.addAll(dbm.getAllDoctors(dbm.conn()));
+    	}
+    	catch(Exception e) {
+  		  e.printStackTrace();
+    	}
+      
+      listView.getItems().addAll(items);
+      
+      listView.setOnMouseClicked(event -> {
+          Doctor selectedDoctor = listView.getSelectionModel().getSelectedItem();
+          if (selectedDoctor != null) {
+              navigateToDestination(selectedDoctor);
+          }
+      });
     }
     
     @Override
     public void initialize(URL location, ResourceBundle resources) {
        
-    	try {
-    		  items.addAll(dbm.getAllDoctors(dbm.conn()));
-    	}
-    	catch(Exception e) {
-    		  e.printStackTrace();
-    	}
-        
-        listView.getItems().addAll(items);
-        
-        listView.setOnMouseClicked(event -> {
-            Doctor selectedDoctor = listView.getSelectionModel().getSelectedItem();
-            if (selectedDoctor != null) {
-                navigateToDestination(selectedDoctor);
-            }
-        });
+    	setupListView();
         
         // Set cell factory
         listView.setCellFactory(param -> new ListCell<>() {
@@ -101,8 +126,8 @@ public class HomeController implements Initializable {
                 if (empty || item == null) {
                     setGraphic(null);
                 } else {
+                	
                     // Update the content of the HBox based on the Doctor object
-                    // For example:
                     name.setText(item.getName());
                     specialty.setText(item.getSpecialization());
                     reviewNo.setText(Integer.toString(item.getTotalReviews()));
