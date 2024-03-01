@@ -1,12 +1,40 @@
 package uk.ac.brunel.managers;
 
-import java.util.ArrayList;
+import java.util.*;
+
 import uk.ac.brunel.models.Doctor;
 
 public class DoctorManager {
 
+	public enum SortOrder {
+		ASCENDING,
+		DESCENDING,
+	}
+	
+	// Sort doctors in order by rating, order depending on the enum case
+	public ArrayList<Doctor> sortDoctorsByRating(ArrayList<Doctor> doctors, SortOrder sortOrder ) {
+		
+		// Define a comparator based on the review rating of the doctor objects
+		Comparator<Doctor> comparator = Comparator.comparingDouble(doctor -> doctor.getReviewRating());
+		
+		// If the enum case is DESCENDING then reverse comparator
+		if (sortOrder == SortOrder.DESCENDING) {
+			comparator = comparator.reversed();
+		}
+		
+		// Sort arraylist using comparator
+		doctors.sort(comparator);
+		
+		return doctors;
+		
+	}
+	
 	/*
-		NOTE: This function assumes that doctor names follow the format "Dr. FirstName LastName".
+	 * NOTE: This function assumes that doctor names follow the format "Dr. FirstName LastName".
+	 * 
+	 * This function returns doctors based on partial input
+	 * This is customised so if a user searches "Mi", it returns doctors whose first and/or last names start with "Mi", not just contain those letters
+	 * 
 	 */
 	public ArrayList<Doctor> filterDoctorByName(ArrayList<Doctor> doctors, String inputText) /*throws CustomExceptions*/ {
 		

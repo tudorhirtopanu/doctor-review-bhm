@@ -17,7 +17,8 @@
           <Button fx:id="helloButton" layoutX="673.0" layoutY="62.0" onAction="#handleButtonClick" text="Search" />
          <TextField fx:id="textField" layoutX="180.0" layoutY="62.0" prefHeight="26.0" prefWidth="340.0" promptText="Search Doctors" />
          <ListView fx:id="listView" layoutX="181.0" layoutY="132.0" prefHeight="386.0" prefWidth="580.0" />
-         <RadioButton layoutX="240.0" layoutY="100.0" mnemonicParsing="false" text="Rating(Highest)">
+         
+         <RadioButton fx:id="sortRatingHighestBtn" layoutX="240.0" layoutY="100.0" onAction="#handleSortButtonClicked" mnemonicParsing="false" text="Rating(Highest)">
             <font>
                <Font size="10.0" />
             </font>
@@ -25,11 +26,13 @@
                <ToggleGroup fx:id="ratingToggle" />
             </toggleGroup>
          </RadioButton>
-         <RadioButton layoutX="338.0" layoutY="100.0" mnemonicParsing="true" text="Rating(Lowest)" toggleGroup="$ratingToggle">
+         
+         <RadioButton fx:id="sortRatingLowestBtn" layoutX="338.0" layoutY="100.0" onAction="#handleSortButtonClicked" mnemonicParsing="true" text="Rating(Lowest)" toggleGroup="$ratingToggle">
             <font>
                <Font size="10.0" />
             </font>
          </RadioButton>
+         
          <Text layoutX="181.0" layoutY="111.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Sort By" />
          
       </children>

@@ -8,6 +8,7 @@ import javafx.util.Callback;
 import uk.ac.brunel.managers.DatabaseManager;
 import uk.ac.brunel.models.Doctor;
 import uk.ac.brunel.managers.DoctorManager;
+import uk.ac.brunel.managers.DoctorManager.SortOrder;
 
 import java.net.URL;
 import java.util.*;
@@ -61,22 +62,26 @@ public class HomeController implements Initializable {
     	listView.getItems().clear();
     	
     	listView.getItems().addAll(filteredDoctors);
-    	
-    	/*
-    	listView.getItems().clear();
-    	
-    	List<Doctor> selectedDoctors = Arrays.asList(
-                new Doctor(0, "Dr Mia Carte", "Vascular Surgery", 4.9, 45),
-                new Doctor(1, "Dr Oliver Johnson", "Vascular Surgery", 3.0, 45),
-                new Doctor(2, "Dr Eli Ward", "Neurolog", 4.5, 49),
-                new Doctor(3, "Dr John Doe", "Cardiology", 4.5, 20),
-                new Doctor(4, "Dr Jane Smith", "Orthopedics", 4.2, 15),
-                new Doctor(5, "Dr Wayne Hope", "Orthopedics", 4.2, 15)
-        );
-    	
-    	listView.getItems().addAll(selectedDoctors);
-    	*/
         
+    }
+    
+    // Sort the array of doctors based on which button has been clicked
+    @FXML private void handleSortButtonClicked(ActionEvent event) {
+    	
+    	if(sortRatingHighestBtn.isSelected()) {
+    		
+    		ArrayList<Doctor> sortedDoctors = doctorManager.sortDoctorsByRating(items, SortOrder.DESCENDING);
+    		
+    		listView.getItems().setAll(sortedDoctors);
+    		
+    	} else if (sortRatingLowestBtn.isSelected()) {
+    		
+    		ArrayList<Doctor> sortedDoctors = doctorManager.sortDoctorsByRating(items, SortOrder.ASCENDING);
+    		
+    		listView.getItems().setAll(sortedDoctors);
+    		
+    	}
+    	
     }
     
     private void setupListView() {
@@ -137,8 +142,6 @@ public class HomeController implements Initializable {
                     specialty.setWrappingWidth(220);
                     reviewNo.setWrappingWidth(75);
                     rating.setWrappingWidth(75);
-                    
-                    //name.setFont(Font.font(null, FontWeight.SEMI_BOLD, 14));
 
                     setGraphic(hbox);
                 }
