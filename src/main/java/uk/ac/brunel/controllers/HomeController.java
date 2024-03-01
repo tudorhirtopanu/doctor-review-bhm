@@ -37,6 +37,7 @@ public class HomeController implements Initializable {
 	@FXML private TextField textField;
 	
     @FXML private Button helloButton;
+    @FXML private Button clearFiltersBtn;
 
     @FXML private ListView<Doctor> listView;
     
@@ -46,8 +47,14 @@ public class HomeController implements Initializable {
     
     @FXML private ToggleGroup ratingToggle;
     
+    @FXML private ComboBox<String> specialtyFilter;
+    
     // variables
-    ArrayList<Doctor> items = new ArrayList<>();
+    ArrayList<Doctor> allDoctors = new ArrayList<>(); // full list of doctors
+    ArrayList<Doctor> doctorItems = new ArrayList<>(); // list of doctors being searched
+    ArrayList<Doctor> filteredDoctorItems = new ArrayList<>(); // filtered list of doctors
+    
+    ArrayList<String> specialisations = new ArrayList<>();
     
     // methods
     
@@ -57,11 +64,11 @@ public class HomeController implements Initializable {
     	
     	System.out.println(text);
     	
-    	ArrayList<Doctor> filteredDoctors = doctorManager.filterDoctorByName(items, text);
+    	doctorItems = doctorManager.filterDoctorByName(allDoctors, text);
     	
     	listView.getItems().clear();
     	
-    	listView.getItems().addAll(filteredDoctors);
+    	listView.getItems().addAll(doctorItems);
         
     }
     
@@ -70,30 +77,59 @@ public class HomeController implements Initializable {
     	
     	if(sortRatingHighestBtn.isSelected()) {
     		
-    		ArrayList<Doctor> sortedDoctors = doctorManager.sortDoctorsByRating(items, SortOrder.DESCENDING);
+    		doctorItems = doctorManager.sortDoctorsByRating(doctorItems, SortOrder.DESCENDING);
     		
-    		listView.getItems().setAll(sortedDoctors);
+    		listView.getItems().setAll(doctorItems);
     		
     	} else if (sortRatingLowestBtn.isSelected()) {
     		
-    		ArrayList<Doctor> sortedDoctors = doctorManager.sortDoctorsByRating(items, SortOrder.ASCENDING);
+    		doctorItems = doctorManager.sortDoctorsByRating(doctorItems, SortOrder.ASCENDING);
     		
-    		listView.getItems().setAll(sortedDoctors);
+    		listView.getItems().setAll(doctorItems);
     		
     	}
     	
     }
     
+    @FXML private void handleComboBoxEvent(ActionEvent event) {
+    	
+    	String specialisation = specialtyFilter.getValue();
+    	
+    	filteredDoctorItems = doctorManager.filterDoctorsBySpecialisation(doctorItems, specialisation);
+    	
+    	listView.getItems().setAll(filteredDoctorItems); 
+    	
+    }
+    
+    @FXML private void resetFilters(ActionEvent event) {
+    	
+    	
+    	System.out.println(listView.getItems().size());
+    	// Set Combo Box to null
+    	specialtyFilter.setValue("");
+    	specialtyFilter.setValue(null);
+    	
+    	
+    	// Set array to unfiltered doctor items
+    	listView.getItems().setAll(doctorItems);
+    }
+    
+    /*
+     * These functions set up the components on initialisation
+     */
+    
+    // Set up the list view
     private void setupListView() {
     	
     	try {
-  		  items.addAll(dbm.getAllDoctors(dbm.conn()));
+  		  doctorItems.addAll(dbm.getAllDoctors(dbm.conn()));
+  		  allDoctors.addAll(dbm.getAllDoctors(dbm.conn()));
     	}
     	catch(Exception e) {
   		  e.printStackTrace();
     	}
       
-      listView.getItems().addAll(items);
+      listView.getItems().addAll(doctorItems);
       
       listView.setOnMouseClicked(event -> {
           Doctor selectedDoctor = listView.getSelectionModel().getSelectedItem();
@@ -103,6 +139,7 @@ public class HomeController implements Initializable {
       });
     }
     
+    // Create a custom cell factory to display the doctor information
     private void setupCellFactory() {
     	
     	listView.setCellFactory(param -> new ListCell<>() {
@@ -147,56 +184,33 @@ public class HomeController implements Initializable {
     	
     }
     
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-       
-    	setupListView();
-    	setupCellFactory();
-        
-    	/*
-        // Set cell factory
-        listView.setCellFactory(param -> new ListCell<>() {
-        	
-        	// Create HBox for each cell
-        	private final HBox hbox = new HBox();
-        	Text name = new Text();
-    		Text specialty = new Text();
-    		Text reviewNo = new Text();
-    		Text rating =  new Text();
-        	
-    		// Instance initialiser block
-        	{
-        		// Create text nodes to display properties of doctor        		
-        		hbox.getChildren().addAll(name,specialty,reviewNo ,rating);
-        		
-        	}
-        	
-        	@Override
-            protected void updateItem(Doctor item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty || item == null) {
-                    setGraphic(null);
-                } else {
-                	
-                    // Update the content of the HBox based on the Doctor object
-                    name.setText(item.getName());
-                    specialty.setText(item.getSpecialization());
-                    reviewNo.setText(Integer.toString(item.getTotalReviews()));
-                    rating.setText(Double.toString(item.getReviewRating()));
-                    
-                    name.setWrappingWidth(175);
-                    specialty.setWrappingWidth(220);
-                    reviewNo.setWrappingWidth(75);
-                    rating.setWrappingWidth(75);
+    // Add specialisations to combo box
+    private void  setupComboBox() {
 
-                    setGraphic(hbox);
-                }
-            }
-        	
-        });
-        */
-
-    
+    	specialtyFilter.setPromptText("Specialty");
+    	
+    	// Create button cell to overcome bug where prompt text wouldnt reset when value is null
+    	specialtyFilter.setButtonCell(new ListCell<String>() {
+    	    @Override
+    	    protected void updateItem(String item, boolean empty) {
+    	        super.updateItem(item, empty);
+    	        if (empty || item == null) {
+    	            setText(specialtyFilter.getPromptText()); // Display prompt text
+    	        } else {
+    	            setText(item);
+    	        }
+    	    }
+    	});
+    	
+    	try {
+    		specialisations = dbm.getSpecialisations(dbm.conn());
+    	}
+    	catch(Exception e) {
+    		  e.printStackTrace();
+      	}
+    	
+    	specialtyFilter.getItems().addAll(specialisations);
+    	
     }
     
     private void navigateToDestination(Doctor doctor) {
@@ -212,6 +226,16 @@ public class HomeController implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+    
+    // Initialiser for the controller
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+       
+    	setupListView();
+    	setupCellFactory();
+    	setupComboBox();
+    
     }
     
 }

@@ -31,9 +31,22 @@ public class DatabaseManager {
 			allDoctors.add(doctor);
 		}
 		
-		
 		return allDoctors;
 		
+	}
+	
+	// Fetch distinct specialisations from database, in alphabetical order
+	public ArrayList<String> getSpecialisations(Connection conn) throws SQLException {
+		
+		ArrayList<String> specialisations = new ArrayList<String>();
+		
+		ResultSet rs = conn.createStatement().executeQuery("SELECT DISTINCT specialization FROM doctors_info ORDER BY specialization ASC");
+		while(rs.next()) {
+			String specialization = rs.getString("specialization");
+			specialisations.add(specialization);
+		}
+		
+		return specialisations;
 	}
 	
 }

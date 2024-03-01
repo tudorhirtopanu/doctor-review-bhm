@@ -29,6 +29,24 @@ public class DoctorManager {
 		
 	}
 	
+	// Filter doctors based on specialisation
+	public ArrayList<Doctor> filterDoctorsBySpecialisation(ArrayList<Doctor> doctors, String specialisation) {
+		
+		ArrayList<Doctor> filteredList = new ArrayList<Doctor>();
+		
+		for(int i = 0; i< doctors.size(); i++) {
+			
+			Doctor doctor = doctors.get(i);
+			
+			if(doctor.getSpecialization().equals(specialisation)) {
+				filteredList.add(doctor);
+			}
+			
+		}
+
+		return filteredList;
+	}
+	
 	/*
 	 * NOTE: This function assumes that doctor names follow the format "Dr. FirstName LastName".
 	 * 
@@ -72,25 +90,17 @@ public class DoctorManager {
 							}
 						}
 					} else {
-						
-						for(int j = 1; j < splitInput.length; j++) {
-							
-							if(splitString[j].startsWith(splitInput[j])) {
-								filteredDoctors.add(doctor);
-								break;
-							}
+						if(splitString[1].startsWith(splitInput[1]) && splitString[2].startsWith(splitInput[2])) {
+							filteredDoctors.add(doctor);
 						}
 					}
 				}
 				// first word isn't Dr. 
 				else {
-					// filter from the start
-					for(int j = 0; j < splitInput.length; j++) {
-						if(splitString[j+1].startsWith(splitInput[j])) {
-							filteredDoctors.add(doctor);
-							break;
-						}					
-					}
+					// return doctors whos first name starts with first input word and whose second name match second input word
+					if(splitString[1].startsWith(splitInput[0]) && splitString[2].startsWith(splitInput[1])) {
+						filteredDoctors.add(doctor);
+					}					
 				}	
 			} 
 			// If user has only typed one word
