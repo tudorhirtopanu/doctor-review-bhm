@@ -103,11 +103,57 @@ public class HomeController implements Initializable {
       });
     }
     
+    private void setupCellFactory() {
+    	
+    	listView.setCellFactory(param -> new ListCell<>() {
+    		
+    		// Create HBox for each cell
+        	private final HBox hbox = new HBox();
+        	Text name = new Text();
+    		Text specialty = new Text();
+    		Text reviewNo = new Text();
+    		Text rating =  new Text();
+    		
+    		// Instance initialiser block
+        	{
+        		// Create text nodes to display properties of doctor        		
+        		hbox.getChildren().addAll(name,specialty,reviewNo ,rating);
+        		
+        	}
+        	
+        	@Override
+            protected void updateItem(Doctor item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setGraphic(null);
+                } else {
+                	
+                    // Update the content of the HBox based on the Doctor object
+                    name.setText(item.getName());
+                    specialty.setText(item.getSpecialization());
+                    reviewNo.setText(Integer.toString(item.getTotalReviews()));
+                    rating.setText(Double.toString(item.getReviewRating()));
+                    
+                    name.setWrappingWidth(175);
+                    specialty.setWrappingWidth(220);
+                    reviewNo.setWrappingWidth(75);
+                    rating.setWrappingWidth(75);
+
+                    setGraphic(hbox);
+                }
+            }
+    		
+    	});
+    	
+    }
+    
     @Override
     public void initialize(URL location, ResourceBundle resources) {
        
     	setupListView();
+    	setupCellFactory();
         
+    	/*
         // Set cell factory
         listView.setCellFactory(param -> new ListCell<>() {
         	
@@ -148,6 +194,7 @@ public class HomeController implements Initializable {
             }
         	
         });
+        */
 
     
     }
