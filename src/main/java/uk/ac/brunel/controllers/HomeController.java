@@ -26,6 +26,7 @@ import javafx.scene.text.Text;
 import javafx.scene.text.*;
 
 
+// TODO: add option to clear text 
 
 public class HomeController implements Initializable {
 	
@@ -56,20 +57,38 @@ public class HomeController implements Initializable {
     
     ArrayList<String> specialisations = new ArrayList<>();
     
+    // flags
+    private boolean filteringSearchItems = false;
+    private boolean isSpecialisationSelected = false;
+    
     // methods
     
-    @FXML private void handleButtonClick(ActionEvent event) {
+    @FXML private void searchDoctors(ActionEvent event) {
     	
     	String text = textField.getText();
     	
-    	System.out.println(text);
+    	//System.out.println(text);
     	
     	doctorItems = doctorManager.filterDoctorByName(allDoctors, text);
     	
-    	listView.getItems().clear();
+    	if(sortRatingHighestBtn.isSelected()) {
+    		doctorItems = doctorManager.sortDoctorsByRating(doctorItems, SortOrder.DESCENDING);
+    	}
+    	else if (sortRatingLowestBtn.isSelected()) {
+    		doctorItems = doctorManager.sortDoctorsByRating(doctorItems, SortOrder.ASCENDING);
+    	}
     	
-    	listView.getItems().addAll(doctorItems);
-        
+    	// if a specialisation is selected then filter by that when searching
+    	if(isSpecialisationSelected) {
+    		filteredDoctorItems = doctorManager.filterDoctorsBySpecialisation(doctorItems, specialtyFilter.getValue());
+    		listView.getItems().setAll(filteredDoctorItems);
+    	} 
+    	
+    	// otherwise just set a new list of doctors
+    	else {
+        	listView.getItems().setAll(doctorItems);
+    	}
+
     }
     
     // Sort the array of doctors based on which button has been clicked
@@ -77,15 +96,27 @@ public class HomeController implements Initializable {
     	
     	if(sortRatingHighestBtn.isSelected()) {
     		
-    		doctorItems = doctorManager.sortDoctorsByRating(doctorItems, SortOrder.DESCENDING);
-    		
-    		listView.getItems().setAll(doctorItems);
-    		
+    		if(!filteringSearchItems) {
+    			doctorItems = doctorManager.sortDoctorsByRating(doctorItems, SortOrder.DESCENDING);
+        		
+        		listView.getItems().setAll(doctorItems);
+    		} else {
+    			filteredDoctorItems = doctorManager.sortDoctorsByRating(filteredDoctorItems, SortOrder.DESCENDING);
+        		
+        		listView.getItems().setAll(filteredDoctorItems);
+    		}
+
     	} else if (sortRatingLowestBtn.isSelected()) {
     		
-    		doctorItems = doctorManager.sortDoctorsByRating(doctorItems, SortOrder.ASCENDING);
-    		
-    		listView.getItems().setAll(doctorItems);
+    		if(!filteringSearchItems) {
+    			doctorItems = doctorManager.sortDoctorsByRating(doctorItems, SortOrder.ASCENDING);
+        		
+        		listView.getItems().setAll(doctorItems);
+    		} else {
+    			filteredDoctorItems = doctorManager.sortDoctorsByRating(filteredDoctorItems, SortOrder.ASCENDING);
+        		
+        		listView.getItems().setAll(filteredDoctorItems);
+    		}
     		
     	}
     	
@@ -98,6 +129,9 @@ public class HomeController implements Initializable {
     	filteredDoctorItems = doctorManager.filterDoctorsBySpecialisation(doctorItems, specialisation);
     	
     	listView.getItems().setAll(filteredDoctorItems); 
+    	
+    	filteringSearchItems = true;
+    	isSpecialisationSelected = true;
     	
     }
     
@@ -112,6 +146,17 @@ public class HomeController implements Initializable {
     	
     	// Set array to unfiltered doctor items
     	listView.getItems().setAll(doctorItems);
+    	
+    	filteringSearchItems = false;
+    	isSpecialisationSelected = false;
+    	
+    	// reset toggles to remove visual indication of radio button toggle
+    	ratingToggle.getToggles().forEach(toggle -> {
+    	    if (toggle.isSelected()) {
+    	        toggle.setSelected(false);
+    	    }
+    	});
+    	//textField.setText("");
     }
     
     /*
