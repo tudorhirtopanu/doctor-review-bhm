@@ -47,6 +47,24 @@ public class DoctorManager {
 		return filteredList;
 	}
 	
+	public ArrayList<Doctor> filterDoctorsByRating(ArrayList<Doctor> doctors, double minReviewRating) {
+		
+		// Store doctors in array list as the final length of list is unknown
+		ArrayList<Doctor> filteredList = new ArrayList<Doctor>();
+		
+		for(int i = 0; i< doctors.size(); i++) {
+			
+			Doctor doctor = doctors.get(i);
+			
+			if(doctor.getReviewRating()>= minReviewRating) {
+				filteredList.add(doctor);
+			}
+			
+		}
+		
+		return filteredList;
+	}
+	
 	/*
 	 * NOTE: This function assumes that doctor names follow the format "Dr. FirstName LastName".
 	 * 

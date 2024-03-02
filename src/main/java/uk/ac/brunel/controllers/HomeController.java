@@ -27,6 +27,7 @@ import javafx.scene.text.*;
 
 
 // TODO: add option to clear text 
+// TODO: instead of flags maybe use is value == null
 
 public class HomeController implements Initializable {
 	
@@ -49,6 +50,7 @@ public class HomeController implements Initializable {
     @FXML private ToggleGroup ratingToggle;
     
     @FXML private ComboBox<String> specialtyFilter;
+    @FXML private ComboBox<Integer> ratingFilter;
     
     // variables
     ArrayList<Doctor> allDoctors = new ArrayList<>(); // full list of doctors
@@ -60,6 +62,7 @@ public class HomeController implements Initializable {
     // flags
     private boolean filteringSearchItems = false;
     private boolean isSpecialisationSelected = false;
+    private boolean isRatingSelected = false;
     
     // methods
     
@@ -79,11 +82,21 @@ public class HomeController implements Initializable {
     	}
     	
     	// if a specialisation is selected then filter by that when searching
-    	if(isSpecialisationSelected) {
+    	if(isSpecialisationSelected && !isRatingSelected) {
     		filteredDoctorItems = doctorManager.filterDoctorsBySpecialisation(doctorItems, specialtyFilter.getValue());
     		listView.getItems().setAll(filteredDoctorItems);
     	} 
-    	
+    	// if a rating is selected then filter by that when searching
+    	else if(isRatingSelected && !isSpecialisationSelected) {
+    		filteredDoctorItems = doctorManager.filterDoctorsByRating(doctorItems, ratingFilter.getValue());
+    		listView.getItems().setAll(filteredDoctorItems);
+    	}
+    	// both are selected so filter by both
+    	else if(isRatingSelected && isSpecialisationSelected) {
+    		filteredDoctorItems = doctorManager.filterDoctorsByRating(doctorItems, ratingFilter.getValue());
+    		filteredDoctorItems = doctorManager.filterDoctorsBySpecialisation(filteredDoctorItems, specialtyFilter.getValue());
+    		listView.getItems().setAll(filteredDoctorItems);
+    	}
     	// otherwise just set a new list of doctors
     	else {
         	listView.getItems().setAll(doctorItems);
@@ -122,16 +135,91 @@ public class HomeController implements Initializable {
     	
     }
     
-    @FXML private void handleComboBoxEvent(ActionEvent event) {
+    @FXML private void handleFilters(ActionEvent event) {
     	
-    	String specialisation = specialtyFilter.getValue();
-    	
-    	filteredDoctorItems = doctorManager.filterDoctorsBySpecialisation(doctorItems, specialisation);
-    	
-    	listView.getItems().setAll(filteredDoctorItems); 
-    	
-    	filteringSearchItems = true;
-    	isSpecialisationSelected = true;
+    	// if the selected combo box is specialty filter
+    	if (event.getSource() == specialtyFilter) {
+    		
+    		// check if rating filter has a value as well
+    		if (ratingFilter.getValue() != null) { 
+        		
+    			// if it does, get the values for both
+        		int minRating = ratingFilter.getValue();
+        		String specialisation = specialtyFilter.getValue();
+        		
+        		// filter the doctors based on rating
+        		filteredDoctorItems = doctorManager.filterDoctorsByRating(doctorItems, minRating);
+        		
+        		// filter that array based on specialisation
+        		filteredDoctorItems = doctorManager.filterDoctorsBySpecialisation(filteredDoctorItems, specialisation);
+        		
+        		// set flags to true
+        		filteringSearchItems = true;
+    	    	isSpecialisationSelected = true;
+    	    	isRatingSelected = true;
+    	    	
+    	    	// set that as the list
+    	    	listView.getItems().setAll(filteredDoctorItems); 
+        	} else {
+        		
+        		// rating filter has no value so get value only for specialisation
+        		String specialisation = specialtyFilter.getValue();
+        		
+        		// filter doctor items by specialisation
+        		filteredDoctorItems = doctorManager.filterDoctorsBySpecialisation(doctorItems, specialisation);
+        		
+        		// set flags to true
+        		filteringSearchItems = true;
+    	    	isSpecialisationSelected = true;
+    	    	
+    	    	// set as list items
+    	    	listView.getItems().setAll(filteredDoctorItems); 
+        		
+        	}
+    		
+    	// Check if selected combo box is rating filter
+    	} else if (event.getSource() == ratingFilter) {
+    		
+    		// If specialty filter has a value as well
+    		if (specialtyFilter.getValue() != null) { 
+
+    			// get values for both combo boxes
+    			int minRating = ratingFilter.getValue();
+        		String specialisation = specialtyFilter.getValue();
+        		
+        		// sort first by specialisation
+        		filteredDoctorItems = doctorManager.filterDoctorsBySpecialisation(doctorItems, specialisation);
+        		
+        		// sort that array by rating
+        		filteredDoctorItems = doctorManager.filterDoctorsByRating(filteredDoctorItems, minRating);
+        		
+        		// set flags to true
+        		filteringSearchItems = true;
+    	    	isSpecialisationSelected = true;
+    	    	isRatingSelected = true;
+    	    	
+    	    	// set as list items
+    	    	listView.getItems().setAll(filteredDoctorItems); 
+        	} else {
+        		
+        		if (ratingFilter.getValue() != null) {
+	        		// specialisation has no value so get rating only
+	        		int minRating = ratingFilter.getValue();
+	        		
+	        		// filter by that rating
+	        		filteredDoctorItems = doctorManager.filterDoctorsByRating(doctorItems, minRating);
+	        		
+	        		// set flags to true
+	        		filteringSearchItems = true;
+	        		isRatingSelected = true;
+	    	    	
+	        		// set as list items
+	    	    	listView.getItems().setAll(filteredDoctorItems); 
+        		}
+        		
+        	}
+    		
+    	}
     	
     }
     
@@ -143,12 +231,16 @@ public class HomeController implements Initializable {
     	specialtyFilter.setValue("");
     	specialtyFilter.setValue(null);
     	
+    	ratingFilter.setValue(0);
+    	ratingFilter.setValue(null);
+    	
     	
     	// Set array to unfiltered doctor items
     	listView.getItems().setAll(doctorItems);
     	
     	filteringSearchItems = false;
     	isSpecialisationSelected = false;
+    	isRatingSelected = false;
     	
     	// reset toggles to remove visual indication of radio button toggle
     	ratingToggle.getToggles().forEach(toggle -> {
@@ -156,7 +248,7 @@ public class HomeController implements Initializable {
     	        toggle.setSelected(false);
     	    }
     	});
-    	//textField.setText("");
+
     }
     
     /*
@@ -233,6 +325,7 @@ public class HomeController implements Initializable {
     private void  setupComboBox() {
 
     	specialtyFilter.setPromptText("Specialty");
+    	ratingFilter.setPromptText("Rating");
     	
     	// Create button cell to overcome bug where prompt text wouldnt reset when value is null
     	specialtyFilter.setButtonCell(new ListCell<String>() {
@@ -247,6 +340,18 @@ public class HomeController implements Initializable {
     	    }
     	});
     	
+    	ratingFilter.setButtonCell(new ListCell<Integer>() {
+    	    @Override
+    	    protected void updateItem(Integer item, boolean empty) {
+    	        super.updateItem(item, empty);
+    	        if (empty || item == null) {
+    	            setText(ratingFilter.getPromptText()); // Display prompt text
+    	        } else {
+    	            setText(String.valueOf(item));
+    	        }
+    	    }
+    	});
+    	
     	try {
     		specialisations = dbm.getSpecialisations(dbm.conn());
     	}
@@ -255,6 +360,7 @@ public class HomeController implements Initializable {
       	}
     	
     	specialtyFilter.getItems().addAll(specialisations);
+    	ratingFilter.getItems().addAll(0, 1, 2, 3, 4);
     	
     }
     

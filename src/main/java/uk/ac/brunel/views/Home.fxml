@@ -35,8 +35,9 @@
          </RadioButton>
          
          <Text layoutX="181.0" layoutY="111.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Sort By" />
-         <ComboBox fx:id="specialtyFilter" layoutX="597.0" layoutY="63.0" onAction="#handleComboBoxEvent" prefHeight="26.0" prefWidth="165.0"/>
-         <Button fx:id="clearFiltersBtn" layoutX="780.0" layoutY="64.0" mnemonicParsing="false" text="Clear Filters" onAction="#resetFilters" />
+         <ComboBox fx:id="specialtyFilter" layoutX="597.0" layoutY="63.0" onAction="#handleFilters" prefHeight="26.0" prefWidth="165.0" />
+         <Button fx:id="clearFiltersBtn" layoutX="655.0" layoutY="101.0" mnemonicParsing="false" onAction="#resetFilters" text="Clear Filters" />
+         <ComboBox fx:id="ratingFilter" layoutX="778.0" layoutY="62.0" onAction="#handleFilters" prefHeight="26.0" prefWidth="97.0" />
          
       </children>
    </AnchorPane>
