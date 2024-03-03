@@ -21,9 +21,10 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.scene.text.*;
+import javafx.geometry.Pos;
 
 
 // TODO: add option to clear text 
@@ -42,6 +43,7 @@ public class HomeController implements Initializable {
     @FXML private Button clearFiltersBtn;
 
     @FXML private ListView<Doctor> listView;
+    @FXML private ListView<Doctor> topDoctorsList;
     
     @FXML private RadioButton sortRatingHighestBtn;
     
@@ -58,6 +60,8 @@ public class HomeController implements Initializable {
     ArrayList<Doctor> filteredDoctorItems = new ArrayList<>(); // filtered list of doctors
     
     ArrayList<String> specialisations = new ArrayList<>();
+    
+    Doctor[] topDoctors = new Doctor[7];
     
     // flags
     private boolean filteringSearchItems = false;
@@ -243,6 +247,7 @@ public class HomeController implements Initializable {
     	isRatingSelected = false;
     	
     	// reset toggles to remove visual indication of radio button toggle
+
     	ratingToggle.getToggles().forEach(toggle -> {
     	    if (toggle.isSelected()) {
     	        toggle.setSelected(false);
@@ -259,26 +264,43 @@ public class HomeController implements Initializable {
     private void setupListView() {
     	
     	try {
+    		
+    		// Load all doctors
   		  doctorItems.addAll(dbm.getAllDoctors(dbm.conn()));
   		  allDoctors.addAll(dbm.getAllDoctors(dbm.conn()));
+  		  
+  		  topDoctors = doctorManager.returnTopDoctors(dbm.getAllDoctors(dbm.conn()), 7);
+  		  
+  		  System.out.println(topDoctors.length);
     	}
     	catch(Exception e) {
   		  e.printStackTrace();
     	}
       
       listView.getItems().addAll(doctorItems);
+      topDoctorsList.getItems().addAll(doctorManager.returnTopDoctors(allDoctors, 7));
       
       listView.setOnMouseClicked(event -> {
           Doctor selectedDoctor = listView.getSelectionModel().getSelectedItem();
           if (selectedDoctor != null) {
-              navigateToDestination(selectedDoctor);
+              navigateToWriteReview(selectedDoctor);
           }
       });
+      
+      topDoctorsList.setOnMouseClicked(event -> {
+          Doctor selectedDoctor = topDoctorsList.getSelectionModel().getSelectedItem();
+          if (selectedDoctor != null) {
+        	  navigateToViewReviews(selectedDoctor);
+          }
+      });
+      
+      
     }
     
     // Create a custom cell factory to display the doctor information
     private void setupCellFactory() {
     	
+    	// Cell factory for all doctors list
     	listView.setCellFactory(param -> new ListCell<>() {
     		
     		// Create HBox for each cell
@@ -298,8 +320,11 @@ public class HomeController implements Initializable {
         	@Override
             protected void updateItem(Doctor item, boolean empty) {
                 super.updateItem(item, empty);
+                
                 if (empty || item == null) {
+                	
                     setGraphic(null);
+                    
                 } else {
                 	
                     // Update the content of the HBox based on the Doctor object
@@ -320,6 +345,45 @@ public class HomeController implements Initializable {
     	});
     	
     }
+    
+    private void setupTopDoctorsCellFactory() {
+    	
+    	topDoctorsList.setCellFactory(param -> new ListCell<>() {
+    		
+    		HBox hbox = new HBox();
+    		Label starLabel = new Label("★");
+    		Text name = new Text();
+    		Text specialty = new Text();
+    		
+    		{
+    			VBox vbox = new VBox();
+    			vbox.getChildren().addAll(name, specialty);
+    			hbox.getChildren().addAll(starLabel, vbox);
+    		}
+    		
+    		@Override
+    		protected void updateItem(Doctor item, boolean empty) {
+    			super.updateItem(item, empty);
+    			
+    			 if (empty || item == null) {
+    	                setGraphic(null);
+    	         } else {
+    	        	 
+    	        	 name.setText(item.getName());
+    	             specialty.setText(item.getSpecialization());
+    	             
+    	             hbox.setSpacing(10);
+                     hbox.setAlignment(Pos.CENTER_LEFT);
+                     setGraphic(hbox);
+    	        	 
+    	         }
+    		}
+    		
+    	});
+    	
+    }
+    
+    
     
     // Add specialisations to combo box
     private void  setupComboBox() {
@@ -364,11 +428,26 @@ public class HomeController implements Initializable {
     	
     }
     
-    private void navigateToDestination(Doctor doctor) {
+    private void navigateToWriteReview(Doctor doctor) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/uk/ac/brunel/views/DoctorReview.fxml"));
             Parent root = loader.load();
             DoctorReviewController destinationController = loader.getController();
+            
+            destinationController.initData(doctor);
+            
+            StackPane rootPane = (StackPane) helloButton.getScene().getRoot();
+            rootPane.getChildren().setAll(root);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    private void navigateToViewReviews(Doctor doctor) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/uk/ac/brunel/views/ReviewList.fxml"));
+            Parent root = loader.load();
+            ViewReviewController destinationController = loader.getController();
             
             destinationController.initData(doctor);
             
@@ -384,6 +463,7 @@ public class HomeController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
        
     	setupListView();
+    	setupTopDoctorsCellFactory();
     	setupCellFactory();
     	setupComboBox();
     

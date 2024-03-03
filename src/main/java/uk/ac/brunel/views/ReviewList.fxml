@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Text?>
+
+<StackPane prefHeight="538.0" prefWidth="909.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="uk.ac.brunel.controllers.ViewReviewController">
+   <AnchorPane prefHeight="401.0" prefWidth="515.0">
+      <children>
+         <Text layoutX="322.0" layoutY="243.0" strokeType="OUTSIDE" strokeWidth="0.0" text="View Reviews for Doctor" />
+      </children>
+   </AnchorPane>
+
+</StackPane>

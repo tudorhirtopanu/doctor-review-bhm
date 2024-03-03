@@ -65,6 +65,27 @@ public class DoctorManager {
 		return filteredList;
 	}
 	
+	public Doctor[] returnTopDoctors(ArrayList<Doctor> doctors, int numToReturn) {
+		
+		// Handle invalid numToReturn
+		if (numToReturn <= 0 || numToReturn > doctors.size()) {
+	        return new Doctor[0];
+	    }
+		
+		ArrayList<Doctor> sortedDoctors = sortDoctorsByRating(doctors, SortOrder.DESCENDING);
+		
+		// Create a new array to store the top doctors
+	    Doctor[] topDoctors = new Doctor[numToReturn];
+	    
+	    // Copy the top doctors from sortedDoctors to topDoctors
+	    for (int i = 0; i < numToReturn; i++) {
+	        topDoctors[i] = sortedDoctors.get(i);
+	    }
+		
+		return topDoctors;
+		
+	}
+	
 	/*
 	 * NOTE: This function assumes that doctor names follow the format "Dr. FirstName LastName".
 	 * 
