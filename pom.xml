@@ -40,5 +40,20 @@
                 </configuration>
             </plugin>
         </plugins>
+        <resources>
+            <!-- Add more resource configurations if needed -->
+            <resource>
+                <directory>src/resources</directory> <!-- Adjust the directory path as needed -->
+                <includes>
+                    <include>*</include> <!-- Include all files -->
+                </includes>
+            </resource>
+            <resource>
+                <directory>src/resources/images</directory> <!-- Adjust the directory path as needed -->
+                <includes>
+                    <include>*</include> <!-- Include all files -->
+                </includes>
+            </resource>
+        </resources>
     </build>
 </project>

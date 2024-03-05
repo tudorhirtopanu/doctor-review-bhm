@@ -7,9 +7,10 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
-import javafx.scene.control.Button;
+import javafx.scene.control.*;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
+import uk.ac.brunel.managers.DatabaseManager;
 import uk.ac.brunel.models.Doctor;
 
 import javafx.scene.image.*;
@@ -18,9 +19,24 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.geometry.Pos;
 
+import java.sql.SQLException;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Tooltip;
+
+// TODO: Make class to get current date
+
 public class DoctorReviewController implements Initializable {
 
+	private DatabaseManager dbManager = new DatabaseManager();
+	
     @FXML private Button backButton;
+    
+    @FXML private Button submitButton;
+    
+    @FXML private Label submitLabel;
+    
+    @FXML private CheckBox anonymCheckbox;
     
     @FXML private Button starBtn1;
     @FXML private Button starBtn2;
@@ -28,11 +44,14 @@ public class DoctorReviewController implements Initializable {
     @FXML private Button starBtn4;
     @FXML private Button starBtn5;
     
-    private boolean starOneActive = false;
-    private boolean starTwoActive = false;
-    private boolean starThreeActive = false;
-    private boolean starFourActive = false;
-    private boolean starFiveActive = false;
+    // Form fields
+    @FXML private TextField name;
+    @FXML private TextField reviewTitle;
+    @FXML private TextArea reviewText;
+    
+    Doctor doctor;
+    
+    private int rating = 0;
     
     @FXML private void navigateToHome() {
         try {
@@ -44,6 +63,75 @@ public class DoctorReviewController implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+    
+    @FXML private void checkboxActions() {
+    	/*
+    	if(anonymCheckbox.isSelected()) {
+    		name.setDisable(true);
+    	} else {
+    		name.setDisable(true);
+    	}
+    	*/
+    	/*
+    	anonymCheckbox.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            name.setDisable(newValue); // Toggle TextField's disable state
+        });
+        */
+
+    }
+    
+    @FXML private void submitReview() {
+    	
+    	if(areFieldsEmpty()) {
+    		System.out.println("At least one field is empty");
+    		
+    		Alert alert = new Alert(AlertType.ERROR);
+    		alert.setTitle("Error");
+    		alert.setHeaderText("Invalid Form Submission");
+    		alert.setContentText("Fields have been left empty/filled incorrectly. Please review and try again");
+
+    		// Show the alert
+    		alert.showAndWait();
+    		
+    	} else {
+    		try {
+    			
+    			String userName = name.isDisable() ? "Anonymous" : name.getText();
+    			
+    			// TODO: Get current date
+        		dbManager.submitReview(doctor.getID(), userName, reviewTitle.getText(), reviewText.getText(), "Today");
+        		navigateToHome();
+        	} catch (SQLException e) {
+        	    // Handle the SQLException
+        	    e.printStackTrace(); 
+        	}
+    	}
+    	
+    	
+    }
+    
+    private boolean areFieldsEmpty() {
+    	
+    	String nameText = name.getText().trim();
+    	String reviewTitleText = reviewTitle.getText().trim();
+    	String reviewBodyText = reviewText.getText().trim();
+    	
+    	if (name.isDisable()) {
+    		if(reviewTitleText.isEmpty() || reviewBodyText.isEmpty()) {
+        		return true;
+        	} else {
+        		return false;
+        	}
+    	} else {
+    		if(nameText.isEmpty() || reviewTitleText.isEmpty() || reviewBodyText.isEmpty()) {
+        		return true;
+        	} else {
+        		return false;
+        	}
+    	}
+    	
+    	
     }
     
     // Method to create and configure a new ImageView with the star image
@@ -92,7 +180,7 @@ public class DoctorReviewController implements Initializable {
     private ImageView createStarImageView(boolean filled) {
     	
     	// Determine the image URL based on whether the star should be filled or unfilled
-        String imageUrl = filled ? "star_fill.png" : "empty_star.png";
+        String imageUrl = filled ? "/star_fill.png" : "/empty_star.png";
         
         // Load the star image from the resources
         Image starImage = new Image(getClass().getResourceAsStream(imageUrl));
@@ -109,106 +197,48 @@ public class DoctorReviewController implements Initializable {
     
     //determine the rating based on the button that triggered the event
     private int getRating(ActionEvent event) {
-        if (event.getSource() == starBtn1) return 1;
-        if (event.getSource() == starBtn2) return 2;
-        if (event.getSource() == starBtn3) return 3;
-        if (event.getSource() == starBtn4) return 4;
-        if (event.getSource() == starBtn5) return 5;
+        if (event.getSource() == starBtn1) {
+        	rating = 1;
+        	return 1;
+        }
+        if (event.getSource() == starBtn2) {
+        	rating = 2;
+        	return 2;
+        }
+        if (event.getSource() == starBtn3) {
+        	rating = 3;
+        	return 3;
+        }
+        if (event.getSource() == starBtn4) {
+        	rating = 4;
+        	return 4;
+        }
+        if (event.getSource() == starBtn5) {
+        	rating = 5;
+        	return 5;
+        }
         
         return 0; 
     }
-    
-    /*
-    @FXML public void setRatings(ActionEvent event) {
-    	
-    	if(event.getSource() == starBtn1) {
-    		ImageView star1 = createStarImageView("star_fill.png");
-    		ImageView star2 = createStarImageView("empty_star.png");
-            ImageView star3 = createStarImageView("empty_star.png");
-            ImageView star4 = createStarImageView("empty_star.png");
-            ImageView star5 = createStarImageView("empty_star.png");
-    		
-    		 setButtonProperties(starBtn1, star1);
-    	     setButtonProperties(starBtn2, star2);
-    	     setButtonProperties(starBtn3, star3);
-    	     setButtonProperties(starBtn4, star4);
-    	     setButtonProperties(starBtn5, star5);
-    	}
-    	
-    	if(event.getSource() == starBtn2) {
-    		ImageView star1 = createStarImageView("star_fill.png");
-    		ImageView star2 = createStarImageView("star_fill.png");
-    		ImageView star3 = createStarImageView("empty_star.png");
-    		ImageView star4 = createStarImageView("empty_star.png");
-    		ImageView star5 = createStarImageView("empty_star.png");
-    		
-    		 setButtonProperties(starBtn1, star1);
-    	     setButtonProperties(starBtn2, star2);
-    	     setButtonProperties(starBtn3, star3);
-    	     setButtonProperties(starBtn4, star4);
-    	     setButtonProperties(starBtn5, star5);
-    	}
-    	
-    	if(event.getSource() == starBtn3) {
-    		ImageView star1 = createStarImageView("star_fill.png");
-    		ImageView star2 = createStarImageView("star_fill.png");
-    		ImageView star3 = createStarImageView("star_fill.png");
-    		ImageView star4 = createStarImageView("empty_star.png");
-    		ImageView star5 = createStarImageView("empty_star.png");
-    		
-    		 setButtonProperties(starBtn1, star1);
-    	     setButtonProperties(starBtn2, star2);
-    	     setButtonProperties(starBtn3, star3);
-    	     setButtonProperties(starBtn4, star4);
-    	     setButtonProperties(starBtn5, star5);
-    	}
-    	
-    	if(event.getSource() == starBtn4) {
-    		ImageView star1 = createStarImageView("star_fill.png");
-    		ImageView star2 = createStarImageView("star_fill.png");
-    		ImageView star3 = createStarImageView("star_fill.png");
-    		ImageView star4 = createStarImageView("star_fill.png");
-    		ImageView star5 = createStarImageView("empty_star.png");
-    		
-    		 setButtonProperties(starBtn1, star1);
-    	     setButtonProperties(starBtn2, star2);
-    	     setButtonProperties(starBtn3, star3);
-    	     setButtonProperties(starBtn4, star4);
-    	     setButtonProperties(starBtn5, star5);
-    	}
-    	
-    	if(event.getSource() == starBtn5) {
-    		ImageView star1 = createStarImageView("star_fill.png");
-    		ImageView star2 = createStarImageView("star_fill.png");
-    		ImageView star3 = createStarImageView("star_fill.png");
-    		ImageView star4 = createStarImageView("star_fill.png");
-    		ImageView star5 = createStarImageView("star_fill.png");
-    		
-    		 setButtonProperties(starBtn1, star1);
-    	     setButtonProperties(starBtn2, star2);
-    	     setButtonProperties(starBtn3, star3);
-    	     setButtonProperties(starBtn4, star4);
-    	     setButtonProperties(starBtn5, star5);
-    	}
-    	
-    }
-    */
+
 	
-	public void initData(Doctor doctor) {
+	public void initData(Doctor doctor_p) {
         // Initialize the destination view with data from the selected doctor
         
         //ratingLabel.setText(String.valueOf(doctor.getReviewRating()));
+		doctor = doctor_p;
+		submitLabel.setText(doctor_p.getName() + " and other users will be able to see this review.");
     }
 
     // Method to initialize buttons
     public void initializeButtons() {
     	
         // Create ImageView instances
-        ImageView star1 = createStarImageView("empty_star.png");
-        ImageView star2 = createStarImageView("empty_star.png");
-        ImageView star3 = createStarImageView("empty_star.png");
-        ImageView star4 = createStarImageView("empty_star.png");
-        ImageView star5 = createStarImageView("empty_star.png");
+        ImageView star1 = createStarImageView("/empty_star.png");
+        ImageView star2 = createStarImageView("/empty_star.png");
+        ImageView star3 = createStarImageView("/empty_star.png");
+        ImageView star4 = createStarImageView("/empty_star.png");
+        ImageView star5 = createStarImageView("/empty_star.png");
 
         // Set properties for each button
         setButtonProperties(starBtn1, star1);
@@ -224,7 +254,9 @@ public class DoctorReviewController implements Initializable {
 	 public void initialize(URL location, ResourceBundle resources) {
 		 
 		 initializeButtons();
-
+		 anonymCheckbox.selectedProperty().addListener((observable, oldValue, newValue) -> {
+	            name.setDisable(newValue); // Toggle TextField's disable state
+	        });
 		 
 	 }
 

@@ -49,4 +49,19 @@ public class DatabaseManager {
 		return specialisations;
 	}
 	
+	// Submit review
+	public void submitReview(int doctorId, String reviewerName, String reviewTitle, String reviewDate, String reviewText) throws SQLException {
+		
+		 try (Connection conn = this.conn()) {
+	            String insertQuery = "INSERT INTO reviews (doctor_id, reviewer_name, review_title, review_date, review_text) VALUES ("
+	                    + doctorId + ", '" + reviewerName + "', '" + reviewTitle + "', '" + reviewDate + "', '" + reviewText + "')";
+
+	            try (Statement statement = conn.createStatement()) {
+	                statement.executeUpdate(insertQuery);
+	            }
+
+	        }
+		
+	}
+	
 }
