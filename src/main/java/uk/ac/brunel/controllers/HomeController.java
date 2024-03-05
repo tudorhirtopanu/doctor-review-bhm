@@ -372,6 +372,13 @@ public class HomeController implements Initializable {
     	        	 name.setText(item.getName());
     	             specialty.setText(item.getSpecialization());
     	             
+    	             name.setFont(Font.font("Arial", 12));
+    	             
+    	             specialty.setFont(Font.font("Arial", 10));
+    	             specialty.setOpacity(0.6);
+    	             
+    	             topDoctorsList.setStyle("-fx-background-color: transparent;");
+    	             
     	             hbox.setSpacing(10);
                      hbox.setAlignment(Pos.CENTER_LEFT);
                      setGraphic(hbox);
