@@ -144,12 +144,13 @@ public class HomeController implements Initializable {
     	// if the selected combo box is specialty filter
     	if (event.getSource() == specialtyFilter) {
     		
+    		String specialisation = specialtyFilter.getValue();
+    		
     		// check if rating filter has a value as well
     		if (ratingFilter.getValue() != null) { 
         		
     			// if it does, get the values for both
         		int minRating = ratingFilter.getValue();
-        		String specialisation = specialtyFilter.getValue();
         		
         		// filter the doctors based on rating
         		filteredDoctorItems = doctorManager.filterDoctorsByRating(doctorItems, minRating);
@@ -162,15 +163,16 @@ public class HomeController implements Initializable {
     	    	isSpecialisationSelected = true;
     	    	isRatingSelected = true;
     	    	
+    	    	sortFilteredDoctorsByRating();
+    	    	
     	    	// set that as the list
     	    	listView.getItems().setAll(filteredDoctorItems); 
         	} else {
         		
-        		// rating filter has no value so get value only for specialisation
-        		String specialisation = specialtyFilter.getValue();
-        		
         		// filter doctor items by specialisation
         		filteredDoctorItems = doctorManager.filterDoctorsBySpecialisation(doctorItems, specialisation);
+        		
+        		sortFilteredDoctorsByRating();
         		
         		// set flags to true
         		filteringSearchItems = true;
@@ -184,11 +186,12 @@ public class HomeController implements Initializable {
     	// Check if selected combo box is rating filter
     	} else if (event.getSource() == ratingFilter) {
     		
+    		int minRating = ratingFilter.getValue();
+    		
     		// If specialty filter has a value as well
     		if (specialtyFilter.getValue() != null) { 
 
     			// get values for both combo boxes
-    			int minRating = ratingFilter.getValue();
         		String specialisation = specialtyFilter.getValue();
         		
         		// sort first by specialisation
@@ -196,6 +199,8 @@ public class HomeController implements Initializable {
         		
         		// sort that array by rating
         		filteredDoctorItems = doctorManager.filterDoctorsByRating(filteredDoctorItems, minRating);
+        		
+        		sortFilteredDoctorsByRating();
         		
         		// set flags to true
         		filteringSearchItems = true;
@@ -207,11 +212,11 @@ public class HomeController implements Initializable {
         	} else {
         		
         		if (ratingFilter.getValue() != null) {
-	        		// specialisation has no value so get rating only
-	        		int minRating = ratingFilter.getValue();
 	        		
 	        		// filter by that rating
 	        		filteredDoctorItems = doctorManager.filterDoctorsByRating(doctorItems, minRating);
+	        		
+	        		sortFilteredDoctorsByRating();
 	        		
 	        		// set flags to true
 	        		filteringSearchItems = true;
@@ -225,6 +230,14 @@ public class HomeController implements Initializable {
     		
     	}
     	
+    }
+    
+    private void sortFilteredDoctorsByRating() {
+    	if(sortRatingHighestBtn.isSelected()) {
+    		filteredDoctorItems = doctorManager.sortDoctorsByRating(filteredDoctorItems, SortOrder.DESCENDING);
+    	} else if(sortRatingLowestBtn.isSelected()) {
+    		filteredDoctorItems = doctorManager.sortDoctorsByRating(filteredDoctorItems, SortOrder.ASCENDING);
+    	}
     }
     
     @FXML private void resetFilters(ActionEvent event) {
