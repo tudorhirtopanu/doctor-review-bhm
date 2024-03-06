@@ -249,7 +249,8 @@ public class HomeController implements Initializable {
     	specialtyFilter.setValue(null);
     	
     	ratingFilter.setValue(0);
-    	ratingFilter.setValue(null);
+    	//ratingFilter.
+    	//ratingFilter.setValue(null);
     	
     	
     	// Set array to unfiltered doctor items
@@ -428,7 +429,7 @@ public class HomeController implements Initializable {
     	    @Override
     	    protected void updateItem(Integer item, boolean empty) {
     	        super.updateItem(item, empty);
-    	        if (empty || item == null) {
+    	        if (empty || item == null || item == 0) {
     	            setText(ratingFilter.getPromptText()); // Display prompt text
     	        } else {
     	            setText(String.valueOf(item));
