@@ -15,11 +15,11 @@
    <AnchorPane prefHeight="800.0" prefWidth="1280.0">
       <children>
       
-          <Button fx:id="helloButton" layoutX="667.0" layoutY="109.0" onAction="#searchDoctors" text="Search" />
-         <TextField fx:id="textField" layoutX="317.0" layoutY="109.0" prefHeight="26.0" prefWidth="340.0" promptText="Search Doctors" />
-         <ListView fx:id="listView" layoutX="318.0" layoutY="179.0" prefHeight="453.0" prefWidth="580.0" />
+          <Button fx:id="helloButton" layoutX="729.0" layoutY="109.0" onAction="#searchDoctors" text="Search" />
+         <TextField fx:id="textField" layoutX="380.0" layoutY="109.0" prefHeight="26.0" prefWidth="340.0" promptText="Search Doctors" />
+         <ListView fx:id="listView" layoutX="381.0" layoutY="200.0" prefHeight="600.0" prefWidth="699.0" />
          
-         <RadioButton fx:id="sortRatingHighestBtn" layoutX="377.0" layoutY="147.0" mnemonicParsing="false" onAction="#handleSortButtonClicked" text="Rating(Highest)">
+         <RadioButton fx:id="sortRatingHighestBtn" layoutX="444.0" layoutY="153.0" mnemonicParsing="false" onAction="#handleSortButtonClicked" text="Rating(Highest)">
             <font>
                <Font size="10.0" />
             </font>
@@ -28,16 +28,16 @@
             </toggleGroup>
          </RadioButton>
          
-         <RadioButton fx:id="sortRatingLowestBtn" layoutX="475.0" layoutY="147.0" mnemonicParsing="true" onAction="#handleSortButtonClicked" text="Rating(Lowest)" toggleGroup="$ratingToggle">
+         <RadioButton fx:id="sortRatingLowestBtn" layoutX="542.0" layoutY="153.0" mnemonicParsing="true" onAction="#handleSortButtonClicked" text="Rating(Lowest)" toggleGroup="$ratingToggle">
             <font>
                <Font size="10.0" />
             </font>
          </RadioButton>
          
-         <Text layoutX="318.0" layoutY="158.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Sort By" />
-         <ComboBox fx:id="specialtyFilter" layoutX="734.0" layoutY="110.0" onAction="#handleFilters" prefHeight="26.0" prefWidth="165.0" />
-         <Button fx:id="clearFiltersBtn" layoutX="792.0" layoutY="148.0" mnemonicParsing="false" onAction="#resetFilters" text="Clear Filters" />
-         <ComboBox fx:id="ratingFilter" layoutX="915.0" layoutY="109.0" onAction="#handleFilters" prefHeight="26.0" prefWidth="97.0" />
+         <Text layoutX="385.0" layoutY="164.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Sort By" />
+         <ComboBox fx:id="specialtyFilter" layoutX="800.0" layoutY="110.0" onAction="#handleFilters" prefHeight="26.0" prefWidth="165.0" />
+         <Button fx:id="clearFiltersBtn" layoutX="1098.0" layoutY="147.0" mnemonicParsing="false" onAction="#resetFilters" text="Clear Filters" />
+         <ComboBox fx:id="ratingFilter" layoutX="983.0" layoutY="109.0" onAction="#handleFilters" prefHeight="26.0" prefWidth="97.0" />
          <Text layoutX="55.0" layoutY="127.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Our Top Doctors" />
          
          <ListView fx:id="topDoctorsList" layoutX="52.0" layoutY="141.0" prefHeight="282.0" prefWidth="192.0" />
