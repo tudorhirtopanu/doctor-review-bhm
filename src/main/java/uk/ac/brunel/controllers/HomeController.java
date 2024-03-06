@@ -1,6 +1,7 @@
 package uk.ac.brunel.controllers;
 
 import javafx.event.ActionEvent;
+import uk.ac.brunel.models.UserSession;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -29,11 +30,13 @@ import javafx.scene.text.*;
 import javafx.geometry.Pos;
 import javafx.scene.text.Font;
 
-
+import uk.ac.brunel.*;
 // TODO: add option to clear text 
 // TODO: instead of flags maybe use is value == null
 
 public class HomeController implements Initializable {
+	
+	private UserSession userSession = UserSession.getInstance("John Doe");
 	
 	private DatabaseManager dbm = new DatabaseManager();
 
@@ -74,6 +77,9 @@ public class HomeController implements Initializable {
     // methods
     
     @FXML private void searchDoctors(ActionEvent event) {
+    	
+    	System.out.println(userSession.getName());
+    	userSession.getFirstDoctorName();
     	
     	String text = textField.getText();
     	
