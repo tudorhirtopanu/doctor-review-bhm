@@ -4,6 +4,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.util.Callback;
 import uk.ac.brunel.managers.DatabaseManager;
 import uk.ac.brunel.models.Doctor;
@@ -25,6 +27,7 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.scene.text.*;
 import javafx.geometry.Pos;
+import javafx.scene.text.Font;
 
 
 // TODO: add option to clear text 
@@ -39,7 +42,7 @@ public class HomeController implements Initializable {
 	// FXML variables
 	@FXML private TextField textField;
 	
-    @FXML private Button helloButton;
+    @FXML private Button searchButton;
     @FXML private Button clearFiltersBtn;
 
     @FXML private ListView<Doctor> listView;
@@ -100,6 +103,7 @@ public class HomeController implements Initializable {
     		filteredDoctorItems = doctorManager.filterDoctorsByRating(doctorItems, ratingFilter.getValue());
     		filteredDoctorItems = doctorManager.filterDoctorsBySpecialisation(filteredDoctorItems, specialtyFilter.getValue());
     		listView.getItems().setAll(filteredDoctorItems);
+    		System.out.println("5");
     	}
     	// otherwise just set a new list of doctors
     	else {
@@ -242,13 +246,16 @@ public class HomeController implements Initializable {
     
     @FXML private void resetFilters(ActionEvent event) {
     	
+    	System.out.println(ratingFilter.getValue());
     	
     	System.out.println(listView.getItems().size());
     	// Set Combo Box to null
     	specialtyFilter.setValue("");
     	specialtyFilter.setValue(null);
     	
-    	ratingFilter.setValue(0);
+    	if(ratingFilter.getValue() != null) {
+    		ratingFilter.setValue(-1);
+    	}
     	//ratingFilter.
     	//ratingFilter.setValue(null);
     	
@@ -337,6 +344,8 @@ public class HomeController implements Initializable {
                 
                 if (empty || item == null) {
                 	
+                	// if cell is empty, do not highlight or have hand cursor
+                	setStyle("-fx-background-color: transparent; -fx-cursor: default;");
                     setGraphic(null);
                     
                 } else {
@@ -347,11 +356,15 @@ public class HomeController implements Initializable {
                     reviewNo.setText(Integer.toString(item.getTotalReviews()));
                     rating.setText(Double.toString(item.getReviewRating()));
                     
-                    name.setWrappingWidth(175);
-                    specialty.setWrappingWidth(220);
-                    reviewNo.setWrappingWidth(75);
-                    rating.setWrappingWidth(75);
-
+                    name.setWrappingWidth(200);
+                    specialty.setWrappingWidth(260);
+                    reviewNo.setWrappingWidth(100);
+                    rating.setWrappingWidth(100);
+                    
+                    listView.setStyle("-fx-background-color: transparent;");
+                    
+                    setStyle("");
+                    
                     setGraphic(hbox);
                 }
             }
@@ -363,44 +376,52 @@ public class HomeController implements Initializable {
     private void setupTopDoctorsCellFactory() {
     	
     	topDoctorsList.setCellFactory(param -> new ListCell<>() {
-    		
-    		HBox hbox = new HBox();
-    		Label starLabel = new Label("★");
-    		Text name = new Text();
-    		Text specialty = new Text();
-    		
-    		{
-    			VBox vbox = new VBox();
-    			vbox.getChildren().addAll(name, specialty);
-    			hbox.getChildren().addAll(starLabel, vbox);
-    		}
-    		
-    		@Override
-    		protected void updateItem(Doctor item, boolean empty) {
-    			super.updateItem(item, empty);
-    			
-    			 if (empty || item == null) {
-    	                setGraphic(null);
-    	         } else {
-    	        	 
-    	        	 name.setText(item.getName());
-    	             specialty.setText(item.getSpecialization());
-    	             
-    	             name.setFont(Font.font("Arial", 12));
-    	             
-    	             specialty.setFont(Font.font("Arial", 10));
-    	             specialty.setOpacity(0.6);
-    	             
-    	             topDoctorsList.setStyle("-fx-background-color: transparent;");
-    	             
-    	             hbox.setSpacing(10);
-                     hbox.setAlignment(Pos.CENTER_LEFT);
-                     setGraphic(hbox);
-    	        	 
-    	         }
-    		}
-    		
+    	    
+    	    HBox hbox = new HBox();
+    	    Label starLabel = new Label();
+    	    
+    	    Text name = new Text();
+    	    Text specialty = new Text();
+    	    
+    	    {
+    	        VBox vbox = new VBox();
+    	        vbox.getChildren().addAll(name, specialty);
+    	        hbox.getChildren().addAll(starLabel, vbox);
+    	    }
+    	    
+    	    @Override
+    	    protected void updateItem(Doctor item, boolean empty) {
+    	        super.updateItem(item, empty);
+    	        
+    	        if (empty || item == null) {
+    	            setGraphic(null);
+    	        } else {
+    	            // Set the text and style class for the starLabel
+    	        	Image image = new Image("/star_fill.png");
+    	            ImageView starImageView = new ImageView(image);
+    	            
+    	            starImageView.setFitWidth(20);
+    	            starImageView.setFitHeight(20);
+    	            
+    	            starLabel.setGraphic(starImageView);
+    	            //starLabel.getStyleClass().add("font-awesome-label");
+    	            
+    	            name.setText(item.getName());
+    	            specialty.setText(item.getSpecialization());
+    	            
+    	            name.setFont(Font.font("Arial", 12));
+    	            specialty.setFont(Font.font("Arial", 10));
+    	            specialty.setOpacity(0.6);
+    	            
+    	            topDoctorsList.setStyle("-fx-background-color: transparent;");
+    	            
+    	            hbox.setSpacing(10);
+    	            hbox.setAlignment(Pos.CENTER_LEFT);
+    	            setGraphic(hbox);
+    	        }
+    	    }
     	});
+
     	
     }
     
@@ -429,7 +450,7 @@ public class HomeController implements Initializable {
     	    @Override
     	    protected void updateItem(Integer item, boolean empty) {
     	        super.updateItem(item, empty);
-    	        if (empty || item == null || item == 0) {
+    	        if (empty || item == null || item == -1) {
     	            setText(ratingFilter.getPromptText()); // Display prompt text
     	        } else {
     	            setText(String.valueOf(item));
@@ -457,7 +478,7 @@ public class HomeController implements Initializable {
             
             destinationController.initData(doctor);
             
-            StackPane rootPane = (StackPane) helloButton.getScene().getRoot();
+            StackPane rootPane = (StackPane) searchButton.getScene().getRoot();
             rootPane.getChildren().setAll(root);
         } catch (IOException e) {
             e.printStackTrace();
@@ -472,7 +493,7 @@ public class HomeController implements Initializable {
             
             destinationController.initData(doctor);
             
-            StackPane rootPane = (StackPane) helloButton.getScene().getRoot();
+            StackPane rootPane = (StackPane) searchButton.getScene().getRoot();
             rootPane.getChildren().setAll(root);
         } catch (IOException e) {
             e.printStackTrace();

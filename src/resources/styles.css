@@ -1,7 +1,31 @@
+/* Global */
+.root {
+    -fx-background-color: #ffffff; 
+    -fx-font-family: Arial;
+}
+
 .button:hover{
 	-fx-scale-x: 1.05;
     -fx-scale-y: 1.05;
     -fx-cursor: hand;
+}
+
+
+.list-cell {
+    -fx-background-color: transparent;
+}
+
+.combo-box {
+	-fx-background-color: transparent;
+	-fx-border-color: #AEAEAE; 
+    -fx-border-width: 1;
+    -fx-border-radius: 5;
+}
+
+/* Specific */
+
+.list-labels {
+    -fx-font-weight: bold;
 }
 
 .ratingButtons {
@@ -14,3 +38,27 @@
 	-fx-background-color: transparent;
 	-fx-cursor: hand;
 }
+
+#listView .list-cell:hover {
+	-fx-background-color: lightblue;
+	-fx-cursor: hand; 
+}
+
+#topDoctorsList .list-cell:hover{
+	-fx-cursor: hand; 
+	-fx-scale-x: 1.03; 
+    -fx-scale-y: 1.03;
+}
+
+.combo-box .list-view .list-cell:hover,
+.combo-box .list-view .list-cell:selected {
+    -fx-background-color: lightblue;
+}
+
+#searchButton{
+	-fx-background-color: #1A1919;
+	-fx-text-fill: #FFFFFF;
+	-fx-border-width: 0;
+}
+
+

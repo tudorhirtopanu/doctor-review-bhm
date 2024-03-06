@@ -8,16 +8,19 @@
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
 <StackPane prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="uk.ac.brunel.controllers.HomeController">
    <AnchorPane prefHeight="800.0" prefWidth="1280.0">
       <children>
+         <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#fafafe" height="802.0" layoutY="-2.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="332.0" />
       
-          <Button fx:id="helloButton" layoutX="729.0" layoutY="109.0" onAction="#searchDoctors" text="Search" />
+          <Button fx:id="searchButton" layoutX="729.0" layoutY="109.0" onAction="#searchDoctors" text="Search" />
          <TextField fx:id="textField" layoutX="380.0" layoutY="109.0" prefHeight="26.0" prefWidth="340.0" promptText="Search Doctors" />
-         <ListView fx:id="listView" layoutX="381.0" layoutY="200.0" prefHeight="600.0" prefWidth="699.0" />
+         <ListView fx:id="listView" layoutX="381.0" layoutY="228.0" prefHeight="573.0" prefWidth="699.0" />
          
          <RadioButton fx:id="sortRatingHighestBtn" layoutX="444.0" layoutY="153.0" mnemonicParsing="false" onAction="#handleSortButtonClicked" text="Rating(Highest)">
             <font>
@@ -40,7 +43,13 @@
          <ComboBox fx:id="ratingFilter" layoutX="983.0" layoutY="109.0" onAction="#handleFilters" prefHeight="26.0" prefWidth="97.0" />
          <Text layoutX="55.0" layoutY="127.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Our Top Doctors" />
          
-         <ListView fx:id="topDoctorsList" layoutX="52.0" layoutY="141.0" prefHeight="282.0" prefWidth="192.0" />
+         <ListView fx:id="topDoctorsList" layoutX="52.0" layoutY="141.0" prefHeight="227.0" prefWidth="192.0" />
+         <Text layoutX="391.0" layoutY="204.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="list-labels" text="Name" />
+         <Text layoutX="591.0" layoutY="204.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="list-labels" text="Specialty" />
+         <Text layoutX="836.0" layoutY="200.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="list-labels" text="Reviews" />
+         <Text layoutX="942.0" layoutY="201.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="list-labels" text="Rating" />
+         <Line endX="1193.0" layoutX="88.0" layoutY="88.0" startX="-100.0" stroke="#c6c6c6" strokeWidth="0.5" />
+         <Line endX="599.1829833984375" layoutX="479.0" layoutY="215.0" startX="-96.67279052734375" stroke="#c6c6c6" strokeWidth="0.5" />
          
       </children>
    </AnchorPane>

@@ -41,17 +41,17 @@
             </plugin>
         </plugins>
         <resources>
-            <!-- Add more resource configurations if needed -->
+           
             <resource>
-                <directory>src/resources</directory> <!-- Adjust the directory path as needed -->
+                <directory>src/resources</directory> 
                 <includes>
-                    <include>*</include> <!-- Include all files -->
+                    <include>*</include> 
                 </includes>
             </resource>
             <resource>
-                <directory>src/resources/images</directory> <!-- Adjust the directory path as needed -->
+                <directory>src/resources/images</directory> 
                 <includes>
-                    <include>*</include> <!-- Include all files -->
+                    <include>*</include> 
                 </includes>
             </resource>
         </resources>

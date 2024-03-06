@@ -1,6 +1,7 @@
 package uk.ac.brunel;
 
 import javafx.application.Application;
+import javafx.scene.text.Font;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -16,7 +17,7 @@ public class Main extends Application {
         Parent root = loader.load();
         
         Scene scene = new Scene(root, 1280, 800);
-       
+        
         
         String css = getClass().getResource("/styles.css").toExternalForm();
         scene.getStylesheets().add(css);
