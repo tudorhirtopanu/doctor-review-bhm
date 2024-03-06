@@ -16,11 +16,13 @@ public class Main extends Application {
         Parent root = loader.load();
         
         Scene scene = new Scene(root, 1280, 800);
+       
         
         String css = getClass().getResource("/styles.css").toExternalForm();
         scene.getStylesheets().add(css);
         
         stage.setScene(scene);
+        stage.setResizable(false);
         stage.show();
     }
 
