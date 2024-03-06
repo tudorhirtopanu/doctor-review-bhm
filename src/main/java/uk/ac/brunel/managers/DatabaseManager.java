@@ -64,4 +64,35 @@ public class DatabaseManager {
 		
 	}
 	
+	// Return random doctors for user session
+	public Doctor[] getUserSessionDoctors(int numToReturn) throws SQLException {
+		
+        ArrayList<Doctor> doctorsList = new ArrayList<>();
+
+        try (Connection conn = this.conn()) {
+            String selectQuery = "SELECT * FROM doctors_info ORDER BY RANDOM() LIMIT " + numToReturn;
+
+            try (Statement statement = conn.createStatement();
+                 ResultSet rs = statement.executeQuery(selectQuery)) {
+
+                while (rs.next()) {
+                    // Retrieve data from the result set and create Doctor objects
+                    int id = rs.getInt("id");
+                    String name = rs.getString("doctor_name"); 
+                    String specialization = rs.getString("specialization"); 
+                    double reviewRating = rs.getDouble("review_rating");
+        			int totalReviews = rs.getInt("total_reviews");
+                    Doctor doctor = new Doctor(id, name, specialization, reviewRating, totalReviews);
+                    doctorsList.add(doctor);
+                }
+            }
+        }
+
+        // Convert List<Doctor> to array
+        Doctor[] doctorsArray = new Doctor[doctorsList.size()];
+        doctorsList.toArray(doctorsArray);
+        
+        return doctorsArray;
+    }
+	
 }
