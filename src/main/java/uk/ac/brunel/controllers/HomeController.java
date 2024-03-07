@@ -5,6 +5,7 @@ import uk.ac.brunel.models.UserSession;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.util.Callback;
@@ -47,6 +48,9 @@ public class HomeController implements Initializable {
 	
     @FXML private Button searchButton;
     @FXML private Button clearFiltersBtn;
+    
+    @FXML private ImageView brunelLogo;
+    @FXML private Image logoImage = new Image(getClass().getResourceAsStream("/brunel_logo.png"));
 
     @FXML private ListView<Doctor> listView;
     @FXML private ListView<Doctor> topDoctorsList;
@@ -309,6 +313,42 @@ public class HomeController implements Initializable {
       listView.setOnMouseClicked(event -> {
           Doctor selectedDoctor = listView.getSelectionModel().getSelectedItem();
           if (selectedDoctor != null) {
+        	  
+        	  boolean hasSeenDoctor = false;
+        	  int[] doctorIDList = userSession.getDoctorIDList();
+        	  // Check if id matches recently seen doctor id
+        	  
+        	  for(int i = 0; i<userSession.getDoctorIDList().length; i++) {
+        		  
+        		  if(doctorIDList[i] == selectedDoctor.getID()) {
+        			  hasSeenDoctor = true;
+        			  break;
+        		  }
+        		  
+        	  }
+        	  
+        	  if (hasSeenDoctor) {
+        		  navigateToWriteReview(selectedDoctor);
+        	  } else {
+        		  System.out.println("Have not seen doctor");
+        		  
+        		 Alert alert = new Alert(AlertType.ERROR);
+          		alert.setTitle("Error");
+          		alert.setHeaderText("Can't Review Doctor");
+          		alert.setContentText("You cannot select this doctor to review as you have not visited them.");
+
+          		// Show the alert
+          		alert.showAndWait();
+        	  }
+        	  
+        	  
+              
+          }
+      });
+      
+      recentlySeenDoctorsList.setOnMouseClicked(event -> {
+          Doctor selectedDoctor = recentlySeenDoctorsList.getSelectionModel().getSelectedItem();
+          if (selectedDoctor != null) {
               navigateToWriteReview(selectedDoctor);
           }
       });
@@ -559,6 +599,9 @@ public class HomeController implements Initializable {
     	setupCellFactory();
     	setupRecentDoctorsFactory();
     	setupComboBox();
+    	
+    	// Set logo image 
+    	brunelLogo.setImage(logoImage);
     
     }
     
