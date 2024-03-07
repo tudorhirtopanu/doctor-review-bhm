@@ -1,13 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.text.Text?>
+<?import javafx.scene.text.Font?>
 
-<StackPane prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="uk.ac.brunel.controllers.ViewReviewController">
+<StackPane fx:id="reviewStackPane" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="uk.ac.brunel.controllers.ViewReviewController">
    <AnchorPane prefHeight="401.0" prefWidth="515.0">
       <children>
-         <Text layoutX="322.0" layoutY="243.0" strokeType="OUTSIDE" strokeWidth="0.0" text="View Reviews for Doctor" />
+         <Button fx:id="backButton" layoutX="48.0" layoutY="38.0" mnemonicParsing="false" onAction="#navigateToHome" text="Back" />
+         <ImageView fx:id="brunelLogo" fitHeight="57.0" fitWidth="116.0" layoutX="103.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true" />
+         <Label layoutX="191.0" layoutY="134.0" text="Reviews" textFill="#bcbcbc">
+            <font>
+               <Font name="Arial Bold" size="14.0" />
+            </font>
+         </Label>
+         <Label fx:id="doctorName" layoutX="281.0" layoutY="116.0" text="Dr Name Example">
+            <font>
+               <Font size="14.0" />
+            </font>
+         </Label>
+         <Label layoutX="281.0" layoutY="142.0" text="Specialisation" />
+			<ScrollPane fx:id="scrollPane" layoutX="192.0" prefHeight="617.0" prefWidth="1014.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="192.0" AnchorPane.rightAnchor="74.0" AnchorPane.topAnchor="183.0">
+             	<content>
+         			<GridPane fx:id="reviewGrid" layoutX="186.0" layoutY="183.0" prefHeight="583.0" prefWidth="965.0">
+
+         			</GridPane>
+         		</content>
+         	</ScrollPane>
       </children>
    </AnchorPane>
 
