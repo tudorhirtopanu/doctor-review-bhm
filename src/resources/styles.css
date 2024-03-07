@@ -61,9 +61,28 @@
 	-fx-border-width: 0;
 }
 
-#recentlySeenDoctorsList .list-cell:hover{
+#recentlySeenDoctorsList .list-cell:hover {
 	-fx-scale-x: 1.03; 
     -fx-scale-y: 1.03;
 }
+
+#reviewAnchorPane {
+    -fx-background-color: #FFFFFF; 
+    -fx-padding: 10px;
+    -fx-background-radius: 5px;
+}
+
+#reviewStackPane {
+    -fx-background-color: #FAFAFE; 
+    -fx-padding: 10px; 
+}
+
+#scrollPane {
+    -fx-background-color: transparent; 
+    -fx-background: #FAFAFE; 
+    -fx-border-color: transparent; 
+    -fx-border-width: 0;
+}
+
 
 
