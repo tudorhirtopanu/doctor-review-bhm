@@ -11,11 +11,18 @@ public class UserSession {
 
     private String name;
     private Doctor[] doctorsSeen;
+    private int[] doctorIDList;
 
     
     private UserSession(String name, Doctor[] doctors) {
         this.name = name;
         this.doctorsSeen = doctors;
+        doctorIDList = new int[doctors.length];
+        for(int i = 0; i < doctors.length; i++) {
+        	
+        	doctorIDList[i] = doctors[i].getID();
+        	
+        }
     }
 
     public static synchronized UserSession getInstance(String name) {
@@ -52,5 +59,9 @@ public class UserSession {
     
     public Doctor[] getRecentDoctors() {
     	return doctorsSeen;
+    }
+    
+    public int[] getDoctorIDList() {
+    	return doctorIDList;
     }
 }
