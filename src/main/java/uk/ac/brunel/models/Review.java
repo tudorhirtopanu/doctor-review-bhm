@@ -8,14 +8,16 @@ public class Review {
 	private String reviewTitle;
 	private String reviewText;
 	private String date;
+	private int reviewRating;
 	
-	public Review(int rID, int dID, String reviewerName, String reviewTitle, String reviewText, String date) {
+	public Review(int rID, int dID, String reviewerName, String reviewTitle, String reviewText, String date, int reviewRating) {
 		reviewId = rID;
 		doctorId = dID;
 		this.reviewerName = reviewerName;
 		this.reviewTitle = reviewTitle;
 		this.reviewText = reviewText;
 		this.date = date;
+		this.reviewRating = reviewRating;
 	}
 	
 	public String getReviewerName() {
@@ -32,6 +34,10 @@ public class Review {
 	
 	public String date() {
 		return date;
+	}
+	
+	public int getReviewRating() {
+		return reviewRating;
 	}
 
 }

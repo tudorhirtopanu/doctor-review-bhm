@@ -2,6 +2,10 @@ package uk.ac.brunel.controllers;
 
 import java.io.IOException;
 
+import javafx.scene.effect.DropShadow;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+
 import javafx.fxml.FXML;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -30,7 +34,14 @@ public class DoctorReviewController implements Initializable {
 
 	private DatabaseManager dbManager = new DatabaseManager();
 	
-    @FXML private Button backButton;
+	@FXML private Rectangle reviewBackgroundRect;
+	
+	@FXML private ImageView brunelLogo;
+    @FXML private Image logoImage = new Image(getClass().getResourceAsStream("/brunel_logo.png"));
+    
+    @FXML private Image xImage = new Image(getClass().getResourceAsStream("/X.png"));
+	
+    @FXML private Button writeRevBackButton;
     
     @FXML private Button submitButton;
     
@@ -53,12 +64,25 @@ public class DoctorReviewController implements Initializable {
     
     private int rating = 0;
     
+    @FXML 
+    private void initialiseView() {
+        
+        // Create an ImageView with the image
+        ImageView imageView = new ImageView(xImage);
+        
+        // Set the graphic of the backButton to the ImageView
+        writeRevBackButton.setGraphic(imageView);
+        
+        imageView.setFitWidth(20);
+        imageView.setFitHeight(20);
+    }
+    
     @FXML private void navigateToHome() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/uk/ac/brunel/views/Home.fxml"));
             Parent root = loader.load();
             //ViewReviewController destinationController = loader.getController();
-            StackPane rootPane = (StackPane) backButton.getScene().getRoot();
+            StackPane rootPane = (StackPane) writeRevBackButton.getScene().getRoot();
             rootPane.getChildren().setAll(root);
         } catch (IOException e) {
             e.printStackTrace();
@@ -100,7 +124,7 @@ public class DoctorReviewController implements Initializable {
     			String userName = name.isDisable() ? "Anonymous" : name.getText();
     			
     			// TODO: Get current date
-        		dbManager.submitReview(doctor.getID(), userName, reviewTitle.getText(), reviewText.getText(), "Today");
+        		dbManager.submitReview(doctor.getID(), userName, reviewTitle.getText(), reviewText.getText(), "Today", rating);
         		navigateToHome();
         	} catch (SQLException e) {
         	    // Handle the SQLException
@@ -118,13 +142,13 @@ public class DoctorReviewController implements Initializable {
     	String reviewBodyText = reviewText.getText().trim();
     	
     	if (name.isDisable()) {
-    		if(reviewTitleText.isEmpty() || reviewBodyText.isEmpty()) {
+    		if(reviewTitleText.isEmpty() || reviewBodyText.isEmpty() || rating == 0) {
         		return true;
         	} else {
         		return false;
         	}
     	} else {
-    		if(nameText.isEmpty() || reviewTitleText.isEmpty() || reviewBodyText.isEmpty()) {
+    		if(nameText.isEmpty() || reviewTitleText.isEmpty() || reviewBodyText.isEmpty() || rating == 0) {
         		return true;
         	} else {
         		return false;
@@ -257,6 +281,23 @@ public class DoctorReviewController implements Initializable {
 		 anonymCheckbox.selectedProperty().addListener((observable, oldValue, newValue) -> {
 	            name.setDisable(newValue); // Toggle TextField's disable state
 	        });
+		 
+		 brunelLogo.setImage(logoImage);
+		 
+		 initialiseView();
+		 
+		 	String hexColor = "#E7E7EB"; // Hexadecimal color value
+	        Color color = Color.web(hexColor);
+		 
+		 	DropShadow dropShadow = new DropShadow();
+	        dropShadow.setColor(color); // Set the color of the drop shadow
+	        dropShadow.setRadius(20); // Set the radius of the drop shadow
+	        dropShadow.setOffsetX(5); // Set the horizontal offset of the drop shadow
+	        dropShadow.setOffsetY(5); // Set the vertical offset of the drop shadow
+
+	        // Apply the DropShadow effect to the Rectangle
+	        reviewBackgroundRect.setEffect(dropShadow);
+		 
 		 
 	 }
 
