@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.effect.*?>
+
+<AnchorPane fx:id="reviewAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="325.0" prefWidth="225.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="uk.ac.brunel.controllers.ReviewCardController">
+   <effect>
+        <DropShadow color="E7E7EB" offsetX="4" offsetY="4"/>
+    </effect>
+   <children>
+      <Label layoutX="57.0" layoutY="167.0" text="This Represents a review" />
+   </children>
+</AnchorPane>
