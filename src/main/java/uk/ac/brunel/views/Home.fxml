@@ -50,6 +50,8 @@
          <Text layoutX="942.0" layoutY="201.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="list-labels" text="Rating" />
          <Line endX="1193.0" layoutX="88.0" layoutY="88.0" startX="-100.0" stroke="#c6c6c6" strokeWidth="0.5" />
          <Line endX="599.1829833984375" layoutX="479.0" layoutY="215.0" startX="-96.67279052734375" stroke="#c6c6c6" strokeWidth="0.5" />
+         <Text layoutX="55.0" layoutY="405.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Recently Seen Doctors" />
+         <ListView fx:id="recentlySeenDoctorsList" layoutX="52.0" layoutY="421.0" prefHeight="200.0" prefWidth="192.0" />
          
       </children>
    </AnchorPane>

@@ -49,4 +49,8 @@ public class UserSession {
     public void getFirstDoctorName() {
     	System.out.println(doctorsSeen[0].getName());
     }
+    
+    public Doctor[] getRecentDoctors() {
+    	return doctorsSeen;
+    }
 }

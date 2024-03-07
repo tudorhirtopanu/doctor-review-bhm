@@ -50,6 +50,7 @@ public class HomeController implements Initializable {
 
     @FXML private ListView<Doctor> listView;
     @FXML private ListView<Doctor> topDoctorsList;
+    @FXML private ListView<Doctor> recentlySeenDoctorsList;
     
     @FXML private RadioButton sortRatingHighestBtn;
     
@@ -262,9 +263,6 @@ public class HomeController implements Initializable {
     	if(ratingFilter.getValue() != null) {
     		ratingFilter.setValue(-1);
     	}
-    	//ratingFilter.
-    	//ratingFilter.setValue(null);
-    	
     	
     	// Set array to unfiltered doctor items
     	listView.getItems().setAll(doctorItems);
@@ -296,9 +294,9 @@ public class HomeController implements Initializable {
   		  doctorItems.addAll(dbm.getAllDoctors(dbm.conn()));
   		  allDoctors.addAll(dbm.getAllDoctors(dbm.conn()));
   		  
+  		  
   		  topDoctors = doctorManager.returnTopDoctors(dbm.getAllDoctors(dbm.conn()), 7);
   		  
-  		  System.out.println(topDoctors.length);
     	}
     	catch(Exception e) {
   		  e.printStackTrace();
@@ -306,6 +304,7 @@ public class HomeController implements Initializable {
       
       listView.getItems().addAll(doctorItems);
       topDoctorsList.getItems().addAll(doctorManager.returnTopDoctors(allDoctors, 7));
+      recentlySeenDoctorsList.getItems().addAll(userSession.getRecentDoctors());
       
       listView.setOnMouseClicked(event -> {
           Doctor selectedDoctor = listView.getSelectionModel().getSelectedItem();
@@ -368,6 +367,51 @@ public class HomeController implements Initializable {
                     rating.setWrappingWidth(100);
                     
                     listView.setStyle("-fx-background-color: transparent;");
+                    
+                    setStyle("");
+                    
+                    setGraphic(hbox);
+                }
+            }
+    		
+    	});
+    	
+    }
+    
+    private void setupRecentDoctorsFactory() {
+    	
+    	// Cell factory for all doctors list
+    	recentlySeenDoctorsList.setCellFactory(param -> new ListCell<>() {
+    		
+    		// Create HBox for each cell
+        	private final HBox hbox = new HBox();
+        	Text name = new Text();
+
+    		// Instance initialiser block
+        	{
+        		// Create text nodes to display properties of doctor        		
+        		hbox.getChildren().addAll(name);
+        		
+        	}
+        	
+        	@Override
+            protected void updateItem(Doctor item, boolean empty) {
+                super.updateItem(item, empty);
+                
+                if (empty || item == null) {
+                	
+                	// if cell is empty, do not highlight or have hand cursor
+                	setStyle("-fx-background-color: transparent; -fx-cursor: default;");
+                    setGraphic(null);
+                    
+                } else {
+                	
+                    // Update the content of the HBox based on the Doctor object
+                    name.setText(item.getName());
+
+                    name.setWrappingWidth(150);
+                    
+                    recentlySeenDoctorsList.setStyle("-fx-background-color: transparent; -fx-cursor: hand;");
                     
                     setStyle("");
                     
@@ -513,6 +557,7 @@ public class HomeController implements Initializable {
     	setupListView();
     	setupTopDoctorsCellFactory();
     	setupCellFactory();
+    	setupRecentDoctorsFactory();
     	setupComboBox();
     
     }

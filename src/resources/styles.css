@@ -61,4 +61,9 @@
 	-fx-border-width: 0;
 }
 
+#recentlySeenDoctorsList .list-cell:hover{
+	-fx-scale-x: 1.03; 
+    -fx-scale-y: 1.03;
+}
+
 
