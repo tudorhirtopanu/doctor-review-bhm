@@ -17,54 +17,62 @@
    <AnchorPane prefHeight="401.0" prefWidth="515.0">
       <children>
          <Rectangle fx:id="reviewBackgroundRect" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="667.0" layoutX="362.0" layoutY="62.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="568.0" />
-         <Text layoutX="412.0" layoutY="130.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Write a Review" translateY="70.0">
+         <Text layoutX="405.0" layoutY="137.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Write a Review" translateY="70.0">
             <font>
-               <Font size="21.0" />
+               <Font name="Avenir Medium" size="21.0" />
             </font>
          </Text>
          <Button fx:id="writeRevBackButton" layoutX="885.0" layoutY="74.0" mnemonicParsing="false" onAction="#navigateToHome" text="" />
-         <Text layoutX="409.0" layoutY="167.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Rating" translateY="70.0">
+         <Text layoutX="405.0" layoutY="171.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Rating" translateY="70.0">
             <font>
-               <Font size="11.0" />
+               <Font name="Avenir Roman" size="11.0" />
             </font>
          </Text>
-         <Text layoutX="410.0" layoutY="228.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Name" translateY="70.0">
+         <Text layoutX="408.0" layoutY="238.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Name" translateY="70.0">
             <font>
-               <Font size="11.0" />
+               <Font name="Avenir Roman" size="11.0" />
             </font>
          </Text>
-         <TextField fx:id="name" layoutX="410.0" layoutY="235.0" prefHeight="26.0" prefWidth="222.0" translateY="70.0" />
-         <CheckBox fx:id="anonymCheckbox" layoutX="410.0" layoutY="271.0" mnemonicParsing="false" onAction="#checkboxActions" prefHeight="18.0" prefWidth="159.0" text="Submit anonymously" translateY="70.0">
+         <TextField fx:id="name" layoutX="410.0" layoutY="244.0" prefHeight="26.0" prefWidth="222.0" translateY="70.0" />
+         <CheckBox fx:id="anonymCheckbox" layoutX="410.0" layoutY="276.0" mnemonicParsing="false" onAction="#checkboxActions" prefHeight="18.0" prefWidth="159.0" text="Submit anonymously" translateY="70.0">
             <font>
-               <Font size="9.0" />
+               <Font name="Avenir Roman" size="11.0" />
             </font></CheckBox>
-         <Text layoutX="410.0" layoutY="318.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Review Title" translateY="70.0">
+         <Text layoutX="409.0" layoutY="325.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Review Title" translateY="70.0">
             <font>
-               <Font size="11.0" />
+               <Font name="Avenir Roman" size="11.0" />
             </font>
          </Text>
-         <TextField fx:id="reviewTitle" layoutX="410.0" layoutY="329.0" prefHeight="26.0" prefWidth="180.0" translateY="70.0" />
-         <Text layoutX="410.0" layoutY="376.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Review Text" translateY="70.0">
+         <TextField fx:id="reviewTitle" layoutX="410.0" layoutY="329.0" prefHeight="26.0" prefWidth="225.0" translateY="70.0" />
+         <Text layoutX="409.0" layoutY="383.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Review Text" translateY="70.0">
             <font>
-               <Font size="11.0" />
+               <Font name="Avenir Roman" size="11.0" />
             </font>
          </Text>
          <TextArea fx:id="reviewText" layoutX="410.0" layoutY="460.0" prefHeight="140.0" prefWidth="312.0" />
-         <Button fx:id="submitReviewButton" layoutX="410.0" layoutY="620.0" mnemonicParsing="false" onAction="#submitReview" prefHeight="26.0" prefWidth="96.0" text="Submit Review">
+         <Button fx:id="submitReviewButton" layoutX="410.0" layoutY="626.0" mnemonicParsing="false" onAction="#submitReview" prefHeight="36.0" prefWidth="109.0" text="Submit Review">
             <font>
-               <Font size="11.0" />
+               <Font size="12.0" />
             </font>
          </Button>
          <ImageView fitHeight="59.0" fitWidth="77.0" layoutX="386.0" layoutY="57.0" pickOnBounds="true" preserveRatio="true" />
-         <Button fx:id="starBtn1" layoutX="407.0" layoutY="177.0" mnemonicParsing="false" onAction="#setRatings" prefHeight="30.0" prefWidth="30.0" styleClass="ratingButtons" translateY="70.0" />
-         <Button fx:id="starBtn2" layoutX="447.0" layoutY="177.0" mnemonicParsing="false" onAction="#setRatings" prefHeight="30.0" prefWidth="30.0" styleClass="ratingButtons" translateY="70.0" />
-         <Button fx:id="starBtn3" layoutX="487.0" layoutY="177.0" mnemonicParsing="false" onAction="#setRatings" prefHeight="30.0" prefWidth="30.0" styleClass="ratingButtons" translateY="70.0" />
-         <Button fx:id="starBtn4" layoutX="527.0" layoutY="177.0" mnemonicParsing="false" onAction="#setRatings" prefHeight="30.0" prefWidth="30.0" styleClass="ratingButtons" translateY="70.0" />
-         <Button fx:id="starBtn5" layoutX="567.0" layoutY="177.0" mnemonicParsing="false" onAction="#setRatings" prefHeight="30.0" prefWidth="30.0" styleClass="ratingButtons" translateY="70.0" />
-         <Label fx:id="submitLabel" layoutX="410.0" layoutY="650.0" />
+         <Button fx:id="starBtn1" layoutX="406.0" layoutY="186.0" mnemonicParsing="false" onAction="#setRatings" prefHeight="30.0" prefWidth="30.0" styleClass="ratingButtons" translateY="70.0" />
+         <Button fx:id="starBtn2" layoutX="446.0" layoutY="186.0" mnemonicParsing="false" onAction="#setRatings" prefHeight="30.0" prefWidth="30.0" styleClass="ratingButtons" translateY="70.0" />
+         <Button fx:id="starBtn3" layoutX="486.0" layoutY="186.0" mnemonicParsing="false" onAction="#setRatings" prefHeight="30.0" prefWidth="30.0" styleClass="ratingButtons" translateY="70.0" />
+         <Button fx:id="starBtn4" layoutX="526.0" layoutY="186.0" mnemonicParsing="false" onAction="#setRatings" prefHeight="30.0" prefWidth="30.0" styleClass="ratingButtons" translateY="70.0" />
+         <Button fx:id="starBtn5" layoutX="566.0" layoutY="186.0" mnemonicParsing="false" onAction="#setRatings" prefHeight="30.0" prefWidth="30.0" styleClass="ratingButtons" translateY="70.0" />
+         <Label fx:id="submitLabel" layoutX="410.0" layoutY="666.0" prefHeight="17.0" prefWidth="492.0">
+            <font>
+               <Font name="Avenir Roman" size="11.0" />
+            </font></Label>
          <Line endX="419.7745361328125" layoutX="485.0" layoutY="167.0" startX="-100.0" stroke="#bfbfbf" strokeWidth="0.5" />
-         <ImageView fx:id="brunelLogo" fitHeight="78.0" fitWidth="170.0" layoutX="388.0" layoutY="76.0" pickOnBounds="true" preserveRatio="true" />
-         <Label fx:id="revRatingLabel" layoutX="625.0" layoutY="254.0" textFill="#b9b9b9" />
+         <ImageView fx:id="brunelLogo" fitHeight="78.0" fitWidth="170.0" layoutX="388.0" layoutY="80.0" pickOnBounds="true" preserveRatio="true" />
+         <Label fx:id="revRatingLabel" layoutX="609.0" layoutY="264.0" prefHeight="17.0" prefWidth="78.0" textFill="#b9b9b9" />
+         <Text fill="#838383" layoutX="413.0" layoutY="615.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Maximum character limit: 350" wrappingWidth="312.0">
+            <font>
+               <Font name="Avenir Light" size="10.0" />
+            </font>
+         </Text>
       </children>
    </AnchorPane>
 

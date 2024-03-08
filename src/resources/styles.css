@@ -108,5 +108,10 @@
     -fx-background-color:white;
     -fx-padding: 0; 
     -fx-margin: 0;
+    -fx-cursor: default;
+}
+
+#backButton {
+	-fx-background-color: transparent;
 }
 
