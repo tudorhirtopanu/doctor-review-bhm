@@ -46,6 +46,7 @@ public class DoctorReviewController implements Initializable {
     @FXML private Button submitButton;
     
     @FXML private Label submitLabel;
+    @FXML private Label revRatingLabel;
     
     @FXML private CheckBox anonymCheckbox;
     
@@ -124,7 +125,8 @@ public class DoctorReviewController implements Initializable {
     			String userName = name.isDisable() ? "Anonymous" : name.getText();
     			
     			// TODO: Get current date
-        		dbManager.submitReview(doctor.getID(), userName, reviewTitle.getText(), reviewText.getText(), "Today", rating);
+        		dbManager.submitReview(doctor.getID(), userName, reviewTitle.getText(), reviewText.getText(), rating);
+        		
         		navigateToHome();
         	} catch (SQLException e) {
         	    // Handle the SQLException
@@ -223,22 +225,27 @@ public class DoctorReviewController implements Initializable {
     private int getRating(ActionEvent event) {
         if (event.getSource() == starBtn1) {
         	rating = 1;
+        	revRatingLabel.setText("Very Poor");
         	return 1;
         }
         if (event.getSource() == starBtn2) {
         	rating = 2;
+        	revRatingLabel.setText("Poor");
         	return 2;
         }
         if (event.getSource() == starBtn3) {
         	rating = 3;
+        	revRatingLabel.setText("Average");
         	return 3;
         }
         if (event.getSource() == starBtn4) {
         	rating = 4;
+        	revRatingLabel.setText("Good");
         	return 4;
         }
         if (event.getSource() == starBtn5) {
         	rating = 5;
+        	revRatingLabel.setText("Excellent");
         	return 5;
         }
         
