@@ -1,5 +1,7 @@
 package uk.ac.brunel.managers;
 import java.sql.*;
+import java.text.DecimalFormat;
+
 import java.util.ArrayList;
 
 import uk.ac.brunel.models.Doctor;
@@ -96,5 +98,21 @@ public class DatabaseManager {
         
         return doctorsArray;
     }
+	
+	public void updateDoctor(Doctor doctor, int rating) throws SQLException  {
+		
+		double newRating = ((doctor.getReviewRating()*doctor.getTotalReviews())+rating) / (doctor.getTotalReviews() + 1);
+		DecimalFormat decimalFormat = new DecimalFormat("#.#");
+		double roundedRating = Double.parseDouble(decimalFormat.format(newRating));
+		
+		try (Connection conn = this.conn()) {
+			 String updateQuery = "UPDATE doctors_info SET review_rating = " + roundedRating + ", total_reviews = total_reviews + 1 WHERE id = " + doctor.getID();
+			 try (Statement statement = conn.createStatement()) {
+	                statement.executeUpdate(updateQuery);
+	                System.out.println("New Rating for "+ doctor.getName() +" is "+ roundedRating);
+	         }
+		}
+		
+	}
 	
 }
