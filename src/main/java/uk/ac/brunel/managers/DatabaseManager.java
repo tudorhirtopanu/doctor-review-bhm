@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import uk.ac.brunel.models.Doctor;
 
 public class DatabaseManager {
+	
+	private DateManager dateManager = new DateManager();
 
 	String url = "jdbc:sqlite:databases/doctors.db";
 	
@@ -50,11 +52,11 @@ public class DatabaseManager {
 	}
 	
 	// Submit review
-	public void submitReview(int doctorId, String reviewerName, String reviewTitle, String reviewDate, String reviewText, int reviewRating) throws SQLException {
+	public void submitReview(int doctorId, String reviewerName, String reviewTitle, String reviewText, int reviewRating) throws SQLException {
 		
 		 try (Connection conn = this.conn()) {
 	            String insertQuery = "INSERT INTO reviews (doctor_id, reviewer_name, review_title, review_date, review_text, review_rating) VALUES ("
-	                    + doctorId + ", '" + reviewerName + "', '" + reviewTitle + "', '" + reviewDate + "', '" + reviewText + "', " + reviewRating + ")";
+	                    + doctorId + ", '" + reviewerName + "', '" + reviewTitle + "', '" + dateManager.getCurrentDateFormatted() + "', '" + reviewText + "', " + reviewRating + ")";
 
 	            try (Statement statement = conn.createStatement()) {
 	                statement.executeUpdate(insertQuery);
