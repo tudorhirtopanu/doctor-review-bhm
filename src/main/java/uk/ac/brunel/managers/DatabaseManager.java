@@ -39,11 +39,11 @@ public class DatabaseManager {
 		
 	}
 	
-	public ArrayList<Review> getReviews(Connection conn, int doctorId) throws SQLException {
+	public ArrayList<Review> getReviews(int doctorId) throws SQLException {
 		
 		ArrayList<Review> allReviews = new ArrayList<Review>();
 		
-		ResultSet rs = conn.createStatement().executeQuery("SELECT * FROM reviews WHERE doctor_id = "+doctorId);
+		ResultSet rs = this.conn().createStatement().executeQuery("SELECT * FROM reviews WHERE doctor_id = "+doctorId);
 		
 		while(rs.next()) {
 			int reviewID = rs.getInt("review_id");
