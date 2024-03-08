@@ -97,5 +97,16 @@
     -fx-background-color: transparent;
 }
 
+#reviewTextArea {
+    -fx-text-box-border: transparent;
+    -fx-background-color: transparent;
+	-fx-background-insets: 0;
+}
 
+#reviewTextArea .content {
+    -fx-background-insets: 0;
+    -fx-background-color:white;
+    -fx-padding: 0; 
+    -fx-margin: 0;
+}
 

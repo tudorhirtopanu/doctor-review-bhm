@@ -32,7 +32,7 @@ public class Review {
 		return reviewText;
 	}
 	
-	public String date() {
+	public String getDate() {
 		return date;
 	}
 	

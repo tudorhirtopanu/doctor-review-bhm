@@ -4,7 +4,7 @@ import java.text.DecimalFormat;
 
 import java.util.ArrayList;
 
-import uk.ac.brunel.models.Doctor;
+import uk.ac.brunel.models.*;
 
 public class DatabaseManager {
 	
@@ -36,6 +36,30 @@ public class DatabaseManager {
 		}
 		
 		return allDoctors;
+		
+	}
+	
+	public ArrayList<Review> getReviews(Connection conn, int doctorId) throws SQLException {
+		
+		ArrayList<Review> allReviews = new ArrayList<Review>();
+		
+		ResultSet rs = conn.createStatement().executeQuery("SELECT * FROM reviews WHERE doctor_id = "+doctorId);
+		
+		while(rs.next()) {
+			int reviewID = rs.getInt("review_id");
+			int doctorID = rs.getInt("doctor_id");
+			String reviewerName = rs.getString("reviewer_name");
+			String reviewTitle = rs.getString("review_title");
+			String reviewText = rs.getString("review_text");
+			String reviewDate = rs.getString("review_date");
+			int reviewId = rs.getInt("review_rating");
+			
+			Review review = new Review(reviewID, doctorID, reviewerName, reviewTitle, reviewText, reviewDate, reviewId);
+			allReviews.add(review);
+			System.out.println(review.getReviewTitle());
+		}
+		
+		return allReviews;
 		
 	}
 	

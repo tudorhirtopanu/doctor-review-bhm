@@ -52,9 +52,10 @@ public class ViewReviewController implements Initializable  {
 	
 	private ArrayList<Review> createDummyReviews() {
         // Dummy method to create some sample reviews
+		
         ArrayList<Review> dummyReviews = new ArrayList<>();
-        dummyReviews.add(new Review(1, 2, "Name 1", "Title 1", "Text 1", "Today",5));
-        dummyReviews.add(new Review(2, 2, "Name 2", "Title 2", "Text 2", "Today", 5));
+        dummyReviews.add(new Review(1, 2, "Name 1", "Title 1", "Great service and approved very fast and tablets sent the next day. This was way better than trying and failing to get through to my doctors surgery, by time I'd have got an appointment my ailment would have gone and I needed tablets immediately. Yes, you pay a little more but the convenience far outweighs that. Yes, you pay a little more but the", "Today",1));
+        dummyReviews.add(new Review(2, 2, "Name 2", "Title 2", "Text 2", "Today", 2));
         dummyReviews.add(new Review(3, 2, "Name 3", "Title 3", "Text 3", "Today", 1));
         dummyReviews.add(new Review(4, 2, "Name 4", "Title 4", "Text 4", "Today", 2));
         dummyReviews.add(new Review(5, 2, "Name 5", "Title 5", "Text 5", "Today", 4));
@@ -82,10 +83,8 @@ public class ViewReviewController implements Initializable  {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/uk/ac/brunel/views/ReviewCard.fxml"));
                 AnchorPane reviewCard = loader.load();
                 ReviewCardController controller = loader.getController();
-                //controller.setTitle(review.getTitle()); // Set title for the review card
-                //controller.setContent(review.getContent()); // Set content for the review card
 
-                //reviewCard.setPadding(new Insets(10));
+                controller.setValues(review.getReviewerName(), review.getDate(), review.getReviewTitle(), review.getReviewText(), review.getReviewRating());
                 
                 reviewGrid.add(reviewCard, columnIndex, rowIndex);
 

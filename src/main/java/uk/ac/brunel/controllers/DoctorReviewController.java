@@ -28,8 +28,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Tooltip;
 
-// TODO: Make class to get current date
-
 public class DoctorReviewController implements Initializable {
 
 	private DatabaseManager dbManager = new DatabaseManager();
@@ -124,9 +122,8 @@ public class DoctorReviewController implements Initializable {
     			
     			String userName = name.isDisable() ? "Anonymous" : name.getText();
     			
-    			// TODO: Get current date
         		dbManager.submitReview(doctor.getID(), userName, reviewTitle.getText(), reviewText.getText(), rating);
-        		
+        		dbManager.updateDoctor(doctor, rating);
         		navigateToHome();
         	} catch (SQLException e) {
         	    // Handle the SQLException
@@ -278,8 +275,6 @@ public class DoctorReviewController implements Initializable {
         setButtonProperties(starBtn4, star4);
         setButtonProperties(starBtn5, star5);
     }
-    
-    
 	
 	 @Override
 	 public void initialize(URL location, ResourceBundle resources) {
@@ -304,6 +299,8 @@ public class DoctorReviewController implements Initializable {
 
 	        // Apply the DropShadow effect to the Rectangle
 	        reviewBackgroundRect.setEffect(dropShadow);
+	        
+	        reviewText.setWrapText(true);
 		 
 		 
 	 }
