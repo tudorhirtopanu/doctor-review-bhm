@@ -53,11 +53,11 @@ public class ViewReviewController implements Initializable  {
 	private ArrayList<Review> createDummyReviews() {
         // Dummy method to create some sample reviews
         ArrayList<Review> dummyReviews = new ArrayList<>();
-        dummyReviews.add(new Review(1, 2, "Name 1", "Title 1", "Text 1", "Today"));
-        dummyReviews.add(new Review(2, 2, "Name 2", "Title 2", "Text 2", "Today"));
-        dummyReviews.add(new Review(3, 2, "Name 3", "Title 3", "Text 3", "Today"));
-        dummyReviews.add(new Review(4, 2, "Name 4", "Title 4", "Text 4", "Today"));
-        dummyReviews.add(new Review(5, 2, "Name 5", "Title 5", "Text 5", "Today"));
+        dummyReviews.add(new Review(1, 2, "Name 1", "Title 1", "Text 1", "Today",5));
+        dummyReviews.add(new Review(2, 2, "Name 2", "Title 2", "Text 2", "Today", 5));
+        dummyReviews.add(new Review(3, 2, "Name 3", "Title 3", "Text 3", "Today", 1));
+        dummyReviews.add(new Review(4, 2, "Name 4", "Title 4", "Text 4", "Today", 2));
+        dummyReviews.add(new Review(5, 2, "Name 5", "Title 5", "Text 5", "Today", 4));
         // Add more dummy reviews as needed
         return dummyReviews;
     }
