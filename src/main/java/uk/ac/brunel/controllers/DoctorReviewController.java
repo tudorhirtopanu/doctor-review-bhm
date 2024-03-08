@@ -1,5 +1,8 @@
 package uk.ac.brunel.controllers;
 
+import uk.ac.brunel.utils.*;
+import uk.ac.brunel.utils.TextFieldUtils.CharLimit;
+
 import java.io.IOException;
 
 import javafx.scene.effect.DropShadow;
@@ -278,6 +281,10 @@ public class DoctorReviewController implements Initializable {
 	
 	 @Override
 	 public void initialize(URL location, ResourceBundle resources) {
+		 
+		 TextFieldUtils.limitCharacters(reviewText, CharLimit.TEXT);
+		 TextFieldUtils.limitTextFieldCharacters(name, CharLimit.NAME);
+		 TextFieldUtils.limitTextFieldCharacters(reviewTitle, CharLimit.TITLE);
 		 
 		 initializeButtons();
 		 anonymCheckbox.selectedProperty().addListener((observable, oldValue, newValue) -> {
