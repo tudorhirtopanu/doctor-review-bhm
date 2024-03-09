@@ -1,128 +1,85 @@
 package uk.ac.brunel.controllers;
 
-import uk.ac.brunel.utils.*;
-import uk.ac.brunel.utils.TextFieldUtils.CharLimit;
-
+// Java Standard Library Imports
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
-import javafx.scene.effect.DropShadow;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
+// SQL imports
+import java.sql.SQLException;
 
+// JavaFX imports
 import javafx.fxml.FXML;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
-import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
+import javafx.scene.control.Label;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.control.Alert;
+import javafx.scene.image.*;
+import javafx.scene.Parent;
+
+// Application specific imports
+import uk.ac.brunel.utils.TextFieldUtils;
+import uk.ac.brunel.utils.TextFieldUtils.CharLimit;
 import uk.ac.brunel.managers.DatabaseManager;
 import uk.ac.brunel.models.Doctor;
+import uk.ac.brunel.utils.DesignUtils;
 
-import javafx.scene.image.*;
-
-import java.net.URL;
-import java.util.ResourceBundle;
-import javafx.geometry.Pos;
-
-import java.sql.SQLException;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.Tooltip;
 
 public class DoctorReviewController implements Initializable {
 
 	private DatabaseManager dbManager = new DatabaseManager();
 	
+	// UI Elements
 	@FXML private Rectangle reviewBackgroundRect;
-	
 	@FXML private ImageView brunelLogo;
     @FXML private Image logoImage = new Image(getClass().getResourceAsStream("/brunel_logo.png"));
-    
     @FXML private Image xImage = new Image(getClass().getResourceAsStream("/X.png"));
-	
     @FXML private Button writeRevBackButton;
-    
     @FXML private Button submitButton;
-    
     @FXML private Label submitLabel;
     @FXML private Label revRatingLabel;
     
-    @FXML private CheckBox anonymCheckbox;
-    
+    // Form fields
     @FXML private Button starBtn1;
     @FXML private Button starBtn2;
     @FXML private Button starBtn3;
     @FXML private Button starBtn4;
     @FXML private Button starBtn5;
     
-    // Form fields
     @FXML private TextField name;
     @FXML private TextField reviewTitle;
     @FXML private TextArea reviewText;
+    @FXML private CheckBox anonymCheckbox;
     
-    Doctor doctor;
+    // Variable containing the currently selected doctor
+    private Doctor doctor;
     
+    // Review rating
     private int rating = 0;
     
-    @FXML 
-    private void initialiseView() {
-        
-        // Create an ImageView with the image
-        ImageView imageView = new ImageView(xImage);
-        
-        // Set the graphic of the backButton to the ImageView
-        writeRevBackButton.setGraphic(imageView);
-        
-        imageView.setFitWidth(20);
-        imageView.setFitHeight(20);
-    }
-    
-    @FXML private void navigateToHome() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/uk/ac/brunel/views/Home.fxml"));
-            Parent root = loader.load();
-            //ViewReviewController destinationController = loader.getController();
-            StackPane rootPane = (StackPane) writeRevBackButton.getScene().getRoot();
-            rootPane.getChildren().setAll(root);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-    
-    @FXML private void checkboxActions() {
-    	/*
-    	if(anonymCheckbox.isSelected()) {
-    		name.setDisable(true);
-    	} else {
-    		name.setDisable(true);
-    	}
-    	*/
-    	/*
-    	anonymCheckbox.selectedProperty().addListener((observable, oldValue, newValue) -> {
-            name.setDisable(newValue); // Toggle TextField's disable state
-        });
-        */
-
-    }
-    
+    // Function to submit review or provide alert if invalid form is submitted
     @FXML private void submitReview() {
     	
+    	// If user tries to submit an empty form
     	if(areFieldsEmpty()) {
-    		System.out.println("At least one field is empty");
     		
-    		Alert alert = new Alert(AlertType.ERROR);
+    		// Display an alert
+    		Alert alert = new Alert(Alert.AlertType.ERROR);
     		alert.setTitle("Error");
     		alert.setHeaderText("Invalid Form Submission");
     		alert.setContentText("Fields have been left empty/filled incorrectly. Please review and try again");
 
-    		// Show the alert
     		alert.showAndWait();
     		
     	} else {
+    		
+    		// Submit the form
     		try {
-    			
     			String userName = name.isDisable() ? "Anonymous" : name.getText();
     			
         		dbManager.submitReview(doctor.getID(), userName, reviewTitle.getText(), reviewText.getText(), rating);
@@ -132,17 +89,38 @@ public class DoctorReviewController implements Initializable {
         	    // Handle the SQLException
         	    e.printStackTrace(); 
         	}
-    	}
-    	
-    	
+    	}    	
     }
     
+    // Set the stars to either filled or unfilled
+    @FXML public void setRatings(ActionEvent event) {
+    	
+    	// Create array containing the buttons
+        Button[] starButtons = {starBtn1, starBtn2, starBtn3, starBtn4, starBtn5};
+        
+        for (int i = 0; i < starButtons.length; i++) {
+        	
+        	// Determine if the star should be filled based on its position and the selected rating
+        	boolean filled = i < getRating(event);
+        	
+        	// Create an ImageView for the star
+            ImageView star = createStarImageView(filled);
+            
+            // set the properties for each star
+            setButtonProperties(starButtons[i], star);
+        }
+        
+    }
+    
+    // Returns a boolean indicating whether or not fields are empty
     private boolean areFieldsEmpty() {
     	
+    	// Get the text from the fields
     	String nameText = name.getText().trim();
     	String reviewTitleText = reviewTitle.getText().trim();
     	String reviewBodyText = reviewText.getText().trim();
     	
+    	// If name text field is disabled then dont check if it is empty
     	if (name.isDisable()) {
     		if(reviewTitleText.isEmpty() || reviewBodyText.isEmpty() || rating == 0) {
         		return true;
@@ -150,6 +128,8 @@ public class DoctorReviewController implements Initializable {
         		return false;
         	}
     	} else {
+    		
+    		// Check if any fields are empty
     		if(nameText.isEmpty() || reviewTitleText.isEmpty() || reviewBodyText.isEmpty() || rating == 0) {
         		return true;
         	} else {
@@ -182,26 +162,6 @@ public class DoctorReviewController implements Initializable {
         button.setAlignment(Pos.CENTER);
     }
     
-    // Set the stars to either filled or unfilled
-    @FXML public void setRatings(ActionEvent event) {
-    	
-    	// Create array containing the buttons
-        Button[] starButtons = {starBtn1, starBtn2, starBtn3, starBtn4, starBtn5};
-        
-        for (int i = 0; i < starButtons.length; i++) {
-        	
-        	// Determine if the star should be filled based on its position and the selected rating
-        	boolean filled = i < getRating(event);
-        	
-        	// Create an ImageView for the star
-            ImageView star = createStarImageView(filled);
-            
-            // set the properties for each star
-            setButtonProperties(starButtons[i], star);
-        }
-        
-    }
-    
     // Returns image view of star
     private ImageView createStarImageView(boolean filled) {
     	
@@ -211,7 +171,7 @@ public class DoctorReviewController implements Initializable {
         // Load the star image from the resources
         Image starImage = new Image(getClass().getResourceAsStream(imageUrl));
         
-     // Create an ImageView for the star image
+        // Create an ImageView for the star image
         ImageView starImageView = new ImageView(starImage);
         
         // Set size
@@ -221,7 +181,7 @@ public class DoctorReviewController implements Initializable {
         return starImageView;
     }
     
-    //determine the rating based on the button that triggered the event
+    // Determine the rating & label based on the button that triggered the event
     private int getRating(ActionEvent event) {
         if (event.getSource() == starBtn1) {
         	rating = 1;
@@ -252,17 +212,8 @@ public class DoctorReviewController implements Initializable {
         return 0; 
     }
 
-	
-	public void initData(Doctor doctor_p) {
-        // Initialize the destination view with data from the selected doctor
-        
-        //ratingLabel.setText(String.valueOf(doctor.getReviewRating()));
-		doctor = doctor_p;
-		submitLabel.setText(doctor_p.getName() + " and other users will be able to see this review.");
-    }
-
     // Method to initialize buttons
-    public void initializeButtons() {
+    public void initialiseButtons() {
     	
         // Create ImageView instances
         ImageView star1 = createStarImageView("/empty_star.png");
@@ -278,36 +229,57 @@ public class DoctorReviewController implements Initializable {
         setButtonProperties(starBtn4, star4);
         setButtonProperties(starBtn5, star5);
     }
+    
+    // Navigate to home view
+    @FXML private void navigateToHome() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/uk/ac/brunel/views/Home.fxml"));
+            Parent root = loader.load();
+            StackPane rootPane = (StackPane) writeRevBackButton.getScene().getRoot();
+            rootPane.getChildren().setAll(root);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    // Recieves data from the home view
+ 	public void initData(Doctor doctor_p) {
+ 		
+ 		doctor = doctor_p;
+ 		submitLabel.setText(doctor_p.getName() + " and other users will be able to see this review.");
+ 		
+        ImageView imageView = new ImageView(xImage);
+        
+        writeRevBackButton.setGraphic(imageView);
+        
+        imageView.setFitWidth(20);
+        imageView.setFitHeight(20);
+     }
+ 	
+ 	//public void setRectangleShadow
 	
 	 @Override
 	 public void initialize(URL location, ResourceBundle resources) {
 		 
+		 // Limit the characters that can be entered for each page
 		 TextFieldUtils.limitCharacters(reviewText, CharLimit.TEXT);
 		 TextFieldUtils.limitTextFieldCharacters(name, CharLimit.NAME);
 		 TextFieldUtils.limitTextFieldCharacters(reviewTitle, CharLimit.TITLE);
 		 
-		 initializeButtons();
+		 initialiseButtons();
+		 
+		 // Disable/enable the name text field based on if the checkbox is selected
 		 anonymCheckbox.selectedProperty().addListener((observable, oldValue, newValue) -> {
-	            name.setDisable(newValue); // Toggle TextField's disable state
-	        });
+	            name.setDisable(newValue);
+	      });
 		 
 		 brunelLogo.setImage(logoImage);
 		 
-		 initialiseView();
-		 
-		 	String hexColor = "#E7E7EB"; // Hexadecimal color value
-	        Color color = Color.web(hexColor);
-		 
-		 	DropShadow dropShadow = new DropShadow();
-	        dropShadow.setColor(color); // Set the color of the drop shadow
-	        dropShadow.setRadius(20); // Set the radius of the drop shadow
-	        dropShadow.setOffsetX(5); // Set the horizontal offset of the drop shadow
-	        dropShadow.setOffsetY(5); // Set the vertical offset of the drop shadow
-
-	        // Apply the DropShadow effect to the Rectangle
-	        reviewBackgroundRect.setEffect(dropShadow);
-	        
-	        reviewText.setWrapText(true);
+		 // Set drop shadow on rectangle
+		 DesignUtils.setDropShadow(reviewBackgroundRect);
+	     
+	     // Allow text to wrap on multiple lines
+	     reviewText.setWrapText(true);
 		 
 		 
 	 }

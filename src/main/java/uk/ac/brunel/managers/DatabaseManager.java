@@ -1,7 +1,7 @@
 package uk.ac.brunel.managers;
 import java.sql.*;
-import java.text.DecimalFormat;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import uk.ac.brunel.models.*;

@@ -32,30 +32,40 @@ public class DoctorManager {
 	// Filter doctors based on specialisation
 	public ArrayList<Doctor> filterDoctorsBySpecialisation(ArrayList<Doctor> doctors, String specialisation) {
 		
+		// Initialize a new ArrayList to store the filtered doctors
 		ArrayList<Doctor> filteredList = new ArrayList<Doctor>();
 		
+		// Iterate through the list of doctors
 		for(int i = 0; i< doctors.size(); i++) {
 			
+			// Get the current doctor from the list
 			Doctor doctor = doctors.get(i);
 			
+			// Check if the doctor's specialisation matches the specified specialisation
 			if(doctor.getSpecialization().equals(specialisation)) {
+				// If the specialisations match, add the doctor to the filtered list
 				filteredList.add(doctor);
 			}
 			
 		}
 
+		// Return the filtered list of doctors
 		return filteredList;
 	}
 	
+	// Function to filter doctors by their rating
 	public ArrayList<Doctor> filterDoctorsByRating(ArrayList<Doctor> doctors, double minReviewRating) {
 		
 		// Store doctors in array list as the final length of list is unknown
 		ArrayList<Doctor> filteredList = new ArrayList<Doctor>();
 		
+		// Iterate through the list of doctors
 		for(int i = 0; i< doctors.size(); i++) {
 			
+			// Get current doctor from the list
 			Doctor doctor = doctors.get(i);
 			
+			// If the doctors rating is greater than or equal to min review rating, add them to the list
 			if(doctor.getReviewRating()>= minReviewRating) {
 				filteredList.add(doctor);
 			}
@@ -93,7 +103,7 @@ public class DoctorManager {
 	 * This is customised so if a user searches "Mi", it returns doctors whose first and/or last names start with "Mi", not just contain those letters
 	 * 
 	 */
-	public ArrayList<Doctor> filterDoctorByName(ArrayList<Doctor> doctors, String inputText) /*throws CustomExceptions*/ {
+	public ArrayList<Doctor> filterDoctorByName(ArrayList<Doctor> doctors, String inputText)  {
 		
 		ArrayList<Doctor> filteredDoctors = new ArrayList<Doctor>();
 		
@@ -109,7 +119,6 @@ public class DoctorManager {
 			
 			if (splitInput.length > splitString.length) {
 				System.out.println("invalid string");
-				//throw new CustomExceptions("Invalid string: User input is longer than the doctor's name.");
 			}
 			
 			// If the user has typed more than one word
