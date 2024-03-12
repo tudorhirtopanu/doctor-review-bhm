@@ -52,6 +52,7 @@ public class HomeController implements Initializable {
     @FXML private ToggleGroup ratingToggle;    
     @FXML private ComboBox<String> specialtyFilter;
     @FXML private ComboBox<Integer> ratingFilter;
+    @FXML private Label noSearchResultsLabel;
     
     // variables
     ArrayList<Doctor> allDoctors = new ArrayList<>(); // full list of doctors
@@ -75,6 +76,12 @@ public class HomeController implements Initializable {
     	
     	// Filter doctors by name
     	doctorItems = doctorManager.filterDoctorByName(allDoctors, text);
+    	
+    	if(doctorItems.size() == 0) {
+        	noSearchResultsLabel.setVisible(true);
+        } else {
+        	noSearchResultsLabel.setVisible(false);
+        }
     	
     	// Sort doctors by rating if selected
     	if(sortRatingHighestBtn.isSelected()) {
@@ -185,6 +192,13 @@ public class HomeController implements Initializable {
     	// Set the list view items with filtered results
         listView.getItems().setAll(filteredDoctorItems);
         
+        // If there are no items then set the label visibility to true
+        if(filteredDoctorItems.size() == 0) {
+        	noSearchResultsLabel.setVisible(true);
+        } else {
+        	noSearchResultsLabel.setVisible(false);
+        }
+        
         // Update flags 
         filteringSearchItems = true;
         isSpecialisationSelected = specialtyFilter.getValue() != null;
@@ -227,6 +241,11 @@ public class HomeController implements Initializable {
     	// Set array to unfiltered doctor items
     	listView.getItems().setAll(doctorItems);
     	
+    	if(doctorItems.size() != 0) {
+    		// set label visibility to false again
+        	noSearchResultsLabel.setVisible(false);
+    	}
+    	
     	filteringSearchItems = false;
     	isSpecialisationSelected = false;
     	isRatingSelected = false;
@@ -258,6 +277,12 @@ public class HomeController implements Initializable {
     	}
     	catch(Exception e) {
   		  e.printStackTrace();
+  		Alert alert = new Alert(Alert.AlertType.ERROR);
+		alert.setTitle("Error");
+		alert.setHeaderText("An Error Has Occured");
+		alert.setContentText("Sorry, we're unable to load the database at the moment. Please try again later or contact support for assistance.");
+
+		alert.showAndWait();
     	}
       
       listView.getItems().addAll(doctorItems);
@@ -306,7 +331,8 @@ public class HomeController implements Initializable {
           if (selectedDoctor != null) {
         	  navigateToViewReviews(selectedDoctor);
           }
-      });      
+      });
+      
     }
     
     // Create a custom cell factory to display the doctor information
@@ -540,6 +566,9 @@ public class HomeController implements Initializable {
     	
     	// Set logo image 
     	brunelLogo.setImage(logoImage);
+    	
+    	// Make label visibility false when view loads
+    	noSearchResultsLabel.setVisible(false);
     
     }
     
