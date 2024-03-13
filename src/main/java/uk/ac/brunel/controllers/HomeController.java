@@ -47,9 +47,15 @@ public class HomeController implements Initializable {
     @FXML private ListView<Doctor> listView;
     @FXML private ListView<Doctor> topDoctorsList;
     @FXML private ListView<Doctor> recentlySeenDoctorsList;
+    
     @FXML private RadioButton sortRatingHighestBtn;
     @FXML private RadioButton sortRatingLowestBtn;
     @FXML private ToggleGroup ratingToggle;    
+    
+    @FXML private RadioButton selectionModeWrite;
+    @FXML private RadioButton selectionModeView;
+    @FXML private ToggleGroup selectionMode;
+    
     @FXML private ComboBox<String> specialtyFilter;
     @FXML private ComboBox<Integer> ratingFilter;
     @FXML private Label noSearchResultsLabel;
@@ -265,7 +271,6 @@ public class HomeController implements Initializable {
     
     // Set up the list view
     private void setupListView() {
-    	
     	try {
     		
     		// Load all doctors
@@ -293,29 +298,38 @@ public class HomeController implements Initializable {
           Doctor selectedDoctor = listView.getSelectionModel().getSelectedItem();
           if (selectedDoctor != null) {
         	  
-        	  boolean hasSeenDoctor = false;
-        	  int[] doctorIDList = userSession.getDoctorIDList();
-        	  // Check if id matches recently seen doctor id
-
-        	  for(int i = 0; i<userSession.getDoctorIDList().length; i++) {
+        	  // If selected mode is Write Reviews
+        	  if(selectionModeWrite.isSelected() == true) {
         		  
-        		  if(doctorIDList[i] == selectedDoctor.getID()) {
-        			  hasSeenDoctor = true;
-        			  break;
-        		  }
+        		  boolean hasSeenDoctor = false;
+            	  int[] doctorIDList = userSession.getDoctorIDList();
+            	  // Check if id matches recently seen doctor id
+
+            	  for(int i = 0; i<userSession.getDoctorIDList().length; i++) {
+            		  
+            		  if(doctorIDList[i] == selectedDoctor.getID()) {
+            			  hasSeenDoctor = true;
+            			  break;
+            		  }
+            	  }
+            	  
+            	  if (hasSeenDoctor) {
+            		  navigateToWriteReview(selectedDoctor);
+            	  } else {
+            		  
+            		// If user has not seen doctor then show alert instead
+            		Alert alert = new Alert(AlertType.ERROR);
+              		alert.setTitle("Error");
+              		alert.setHeaderText("Can't Review Doctor");
+              		alert.setContentText("You cannot select this doctor to review as you have not visited them.");
+              		alert.showAndWait();
+            	  } 
+            	  
+        	  } else if (selectionModeView.isSelected() == true) {
+        		  navigateToViewReviews(selectedDoctor);
         	  }
         	  
-        	  if (hasSeenDoctor) {
-        		  navigateToWriteReview(selectedDoctor);
-        	  } else {
-        		  
-        		// If user has not seen doctor then show alert instead
-        		Alert alert = new Alert(AlertType.ERROR);
-          		alert.setTitle("Error");
-          		alert.setHeaderText("Can't Review Doctor");
-          		alert.setContentText("You cannot select this doctor to review as you have not visited them.");
-          		alert.showAndWait();
-        	  } 
+        	  
           }
       });
       
@@ -384,6 +398,7 @@ public class HomeController implements Initializable {
                 }
             }
     	});
+    	
     }
     
     private void setupRecentDoctorsFactory() {
@@ -569,6 +584,9 @@ public class HomeController implements Initializable {
     	
     	// Make label visibility false when view loads
     	noSearchResultsLabel.setVisible(false);
+    	
+    	// By default set selectionModeWrite to true
+    	selectionModeWrite.setSelected(true);
     
     }
     
