@@ -35,6 +35,10 @@ public class Review {
 		this.reviewRating = reviewRating;
 	}
 	
+	public int getReviewID() {
+		return reviewId;
+	}
+	
 	public String getReviewerName() {
 		return reviewerName;
 	}
