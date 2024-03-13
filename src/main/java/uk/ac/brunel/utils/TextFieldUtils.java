@@ -22,15 +22,13 @@ public class TextFieldUtils {
 	    }
 	}
 	
-	//private final static int maxCharacters = 350;
-	
 	public static void limitCharacters(TextArea textArea, CharLimit limit) {
         textArea.textProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.length() > limit.getCharCount()) {
                 textArea.setText(oldValue); 
             }
             
-            String filteredValue = newValue.replaceAll("[^a-zA-Z0-9 ]", ""); // Allow only letters, digits, and spaces
+            String filteredValue = newValue.replaceAll("[^a-zA-Z0-9,.?! ]", ""); 
             if (!filteredValue.equals(newValue)) {
                 textArea.setText(filteredValue);
             }
@@ -43,9 +41,8 @@ public class TextFieldUtils {
             if (newValue.length() > limit.getCharCount()) {
                 textField.setText(oldValue); 
             }
-            
-            // TODO: allow certain punctuation for title maybe
-            String filteredValue = newValue.replaceAll("[^a-zA-Z0-9 ]", ""); // Allow only letters, digits, and spaces
+
+            String filteredValue = newValue.replaceAll("[^a-zA-Z0-9,.?! ]", ""); 
             if (!filteredValue.equals(newValue)) {
                 textField.setText(filteredValue);
             }
