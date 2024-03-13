@@ -76,11 +76,11 @@ public class ViewReviewController implements Initializable  {
 		
 		// Array of dummy reviews
         ArrayList<Review> dummyReviews = new ArrayList<>();
-        dummyReviews.add(new Review(1, 2, "Name 1", "Title 1", "Great service and approved very fast and tablets sent the next day. This was way better than trying and failing to get through to my doctors surgery, by time I'd have got an appointment my ailment would have gone and I needed tablets immediately. Yes, you pay a little more but the convenience far outweighs that. Yes, you pay a little more but the", "Today",1));
-        dummyReviews.add(new Review(2, 2, "Name 2", "Title 2", "Text 2", "Today", 2));
-        dummyReviews.add(new Review(3, 2, "Name 3", "Title 3", "Text 3", "Today", 1));
-        dummyReviews.add(new Review(4, 2, "Name 4", "Title 4", "Text 4", "Today", 2));
-        dummyReviews.add(new Review(5, 2, "Name 5", "Title 5", "Text 5", "Today", 4));
+        dummyReviews.add(new Review(1, 2, "Emily Smith", "Life Saver!", doctor.getName() + "'s expertise changed my life! Highly recommended for their compassionate care and accurate diagnosis", "12 January 2024",5));
+        dummyReviews.add(new Review(2, 2, "David Johnson", "Exceptional Doctor", doctor.getName()+" is an exceptional doctor! Their dedication to their patients and depth of knowledge are unmatched", "20 January 2024", 5));
+        dummyReviews.add(new Review(3, 2, "Lisa Chen", "Caring and Knowledgeable", "They are not only caring but also highly knowledgeable. Took time to listen and provided excellent care", "1 Febuary 2024", 5));
+        dummyReviews.add(new Review(4, 2, "Michael Brown", "Needs Improvement", "Lack of communication and poor manners. Would not recommend to anyone.", "3 March 2024", 1));
+        dummyReviews.add(new Review(5, 2, "Anonymous", "Average Experience", "The experience with "+ doctor.getName() + " was okay. Nothing exceptional, but nothing particularly negative either.", "7 March 2024", 3));
         
         try {
         	// add on actual reviews to dummy reviews
