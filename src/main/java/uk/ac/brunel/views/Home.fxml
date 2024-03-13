@@ -78,6 +78,24 @@
                </VBox>
             </graphic>
          </Label>
+         <RadioButton fx:id="selectionModeWrite" layoutX="1100.0" layoutY="262.0" mnemonicParsing="false" text="Write Review">
+            <font>
+               <Font size="12.0" />
+            </font>
+            <toggleGroup>
+               <ToggleGroup fx:id="selectionMode" />
+            </toggleGroup>
+         </RadioButton>
+         <RadioButton fx:id="selectionModeView" layoutX="1100.0" layoutY="287.0" mnemonicParsing="false" text="View Reviews" toggleGroup="$selectionMode">
+            <font>
+               <Font size="12.0" />
+            </font>
+         </RadioButton>
+         <Text layoutX="1100.0" layoutY="243.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Selection Mode:">
+            <font>
+               <Font size="14.0" />
+            </font>
+         </Text>
          
       </children>
    </AnchorPane>
